@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式白斑姑婆芋銷售指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 
+        Application Structure Plan: 
+        This SPA is an interactive guide for a Variegated Alocasia seller, adapted from research.
+        1. Hero Section: Introduces the "Alocasia Phenomenon" as a high-value asset.
+        2. Interactive Pot Selector: Implements the pot selection matrix from the research. Users select a style, and the tool provides pot recommendations, photo tips, and emphasizes the "Two-Pot System".
+        3. Regional Cultivation Guide: The core of the user's request. It uses four Chart.js doughnut charts to visualize the specific soil recipes for Northern, Central, Southern, and Eastern Taiwan.
+        4. Plant Profile: Highlights Alocasia's key traits: variegation, tuber structure, dormancy, and now includes detailed lighting requirements.
+        This structure prioritizes user engagement and practical application of the research data.
+    -->
+    <!-- 
+        Visualization & Content Choices:
+        1. Report Info: Pot style matrix -> Goal: Compare & Decide -> Viz/Method: JS-powered interactive card display.
+        2. Report Info: Regional soil mix recipes -> Goal: Inform & Compare -> Viz/Method: Four Chart.js doughnut charts.
+        3. Report Info: Alocasia's key traits -> Goal: Inform -> Viz/Method: Styled HTML cards with icons.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+        .active-nav {
+            color: #334155; /* slate-700 */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #64748b; /* slate-500 */
+        }
+        .active-tab {
+            background-color: #334155; /* slate-700 */
+            color: #f1f5f9; /* slate-100 */
+        }
+        .inactive-tab {
+            background-color: #e2e8f0; /* slate-200 */
+            color: #475569; /* slate-600 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-slate-50/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-slate-800">
+                    <span class="text-slate-600">白斑姑婆芋</span>商業聖經
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#phenomenon" class="inactive-nav hover:text-slate-700 transition-colors duration-300">植物資產</a>
+                    <a href="#selector" class="inactive-nav hover:text-slate-700 transition-colors duration-300">盆器風格</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-slate-700 transition-colors duration-300">介質指南</a>
+                    <a href="#profile" class="inactive-nav hover:text-slate-700 transition-colors duration-300">植株檔案</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-slate-700 hover:bg-slate-200 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2">
+            <a href="#phenomenon" class="block py-2 inactive-nav">植物資產</a>
+            <a href="#selector" class="block py-2 inactive-nav">盆器風格</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">介質指南</a>
+            <a href="#profile" class="block py-2 inactive-nav">植株檔案</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Alocasia Phenomenon -->
+        <section id="phenomenon" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">栽培一種頂級植物資產</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">白斑姑婆芋是「大自然藝術性的活體象徵」。其獨一無二的斑葉變化，使其成為高價值的收藏品，而非普通觀葉植物。掌握其栽培與呈現，是贏得頂級市場的關鍵。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl mb-3 text-slate-700 flex items-center">
+                        <span class="text-2xl mr-2">💎</span>市場價值
+                    </h3>
+                    <p class="text-slate-700">每一株健康的白斑姑婆芋都是獨一無二的藝術品。成功的商業模式在於提供強健、視覺驚豔的植株，使其獲得高溢價，並建立品牌忠誠度。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl mb-3 text-amber-700 flex items-center">
+                        <span class="text-2xl mr-2">⚠️</span>核心挑戰
+                    </h3>
+                    <p class="text-slate-700">此植物對過度澆水極為敏感，塊莖極易腐爛。任何商業策略都必須以「根系健康」為最高指導原則，這是不可妥協的基礎。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Pot Selector -->
+        <section id="selector" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">盆器風格：互動攝影指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">盆器是風格的宣言，也是園藝科學的體現。點擊下方不同的風格定位，探索最適合白斑姑婆芋的商業策略。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-style="system" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm active-tab">雙盆系統 (首選)</button>
+                <button data-style="minimalist" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">現代簡約</button>
+                <button data-style="rustic" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">鄉村自然</button>
+            </div>
+
+            <div id="pot-display" class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-slate-200 transition-opacity duration-500">
+                <!-- Content will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 3: Cultivation Guide -->
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">台灣分區介質指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">健康的根系是植株價值的基礎。針對台灣各區氣候，我們提供精準的介質配方，最大化栽培成功率，降低商業損失。</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-slate-200">
+                <div class="mb-8">
+                    <h3 class="font-bold text-2xl text-center mb-4 text-slate-700">介質的科學：矛盾的平衡</h3>
+                    <p class="text-center max-w-2xl mx-auto text-slate-600">完美的姑婆芋介質必須同時具備<strong class="text-slate-700">保水性</strong>與<strong class="text-slate-700">卓越的排水通氣性</strong>。關鍵是使用「塊狀混合介質」，避免塊莖長時間浸泡在濕潤環境中導致腐爛。</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">北部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">高通氣性，應對冬季濕冷、低蒸發的環境，預防根腐。</p>
+                        <div class="chart-container"><canvas id="northChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">中部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">均衡配方，在保水與排水間取得平衡，適應穩定氣候。</p>
+                        <div class="chart-container"><canvas id="centralChart"></canvas></div>
+                    </div>
+                     <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">南部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">強化保水以應對酷暑，同時需快速排水以應對雨季。</p>
+                        <div class="chart-container"><canvas id="southChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">東部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">極致排水性，應對全國最高降雨量及颱風季節。</p>
+                        <div class="chart-container"><canvas id="eastChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Plant Profile -->
+        <section id="profile" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">植株速覽檔案</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">快速掌握白斑姑婆芋的核心美學、商業賣點與養護關鍵。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">🎨</div>
+                    <h3 class="text-xl font-bold mb-2">斑葉的藝術</h3>
+                    <p class="text-slate-600">白色斑紋為不穩定基因表現，每片葉子都獨一無二。這正是其收藏價值所在。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">🥔</div>
+                    <h3 class="text-xl font-bold mb-2">塊莖結構</h3>
+                    <p class="text-slate-600">植物從儲存養分的塊莖生長，此部位對缺氧和過濕極敏感，是養護成敗的關鍵。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">⚖️</div>
+                    <h3 class="text-xl font-bold mb-2">頭重腳輕</h3>
+                    <p class="text-slate-600">成熟植株葉片巨大沉重，需選用具重量、穩固的盆器以防傾倒，保護珍貴葉片。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">☀️</div>
+                    <h3 class="text-xl font-bold mb-2">光照需求</h3>
+                    <p class="text-slate-600">每日需 6-8 小時明亮散射光。避免陽光直射，以免燒傷脆弱的白色斑塊。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">❄️</div>
+                    <h3 class="text-xl font-bold mb-2">休眠與毒性</h3>
+                    <p class="text-slate-600">冬季低溫可能落葉休眠，屬正常現象。全株含草酸鈣，對人畜有毒，需警示顧客。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 mt-16">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>互動式白斑姑婆芋銷售指南 | 為商業成功而生</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Pot Selector Data based on Alocasia Research
+            const potStyles = {
+                system: {
+                    title: '雙盆系統：兼顧美學與機能的專業首選',
+                    materials: '功能性塑膠內盆 + 任何風格的裝飾性外盆(套盆)',
+                    philosophy: '這是平衡美學與園藝學的最佳商業策略。植株在有充足排水孔的塑膠內盆中確保根系健康，再放入無孔的美觀套盆中用於攝影與銷售，為顧客提供靈活性與高成功率。',
+                    photoGoal: '展示其便利性與多樣性。可拍攝將內盆取出澆水、檢查根系的教學照，或展示同一植株搭配不同套盆的組合，突顯產品的附加價值與專業性。'
+                },
+                minimalist: {
+                    title: '現代簡約：聚焦斑葉之美',
+                    materials: '釉面陶瓷盆 (白、灰、黑、米色)',
+                    philosophy: '中性、單色的盆器如同畫框，能最大程度地突顯白斑姑婆芋複雜華麗的葉片。釉面材質保水性強，直接種植風險高，強烈建議作為「雙盆系統」的外盆使用。',
+                    photoGoal: '創造乾淨、高質感的產品照片。背景簡潔，光線柔和，讓獨特的斑葉成為絕對主角，是高端市場的主流風格。'
+                },
+                rustic: {
+                    title: '鄉村自然：為根系呼吸而生',
+                    materials: '無釉陶盆 (Terracotta)',
+                    philosophy: '陶盆絕佳的透氣性對極易爛根的姑婆芋非常有利，能幫助介質快速乾燥，容錯率高。其質樸的質感能營造溫暖、自然的風格。但需注意澆水頻率可能增加。',
+                    photoGoal: '拍攝充滿生活氣息的場景照。可搭配木質傢俱，營造溫馨、舒適的氛圍。注意陶盆表面可能出現白色鹽漬，攝影前需清潔。'
+                }
+            };
+
+            const potDisplay = document.getElementById('pot-display');
+            const styleButtons = document.querySelectorAll('.pot-style-btn');
+
+            function updatePotDisplay(style) {
+                const data = potStyles[style];
+                potDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    potDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-slate-700">推薦材質</h4>
+                                <p class="text-slate-600 mb-4">${data.materials}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-slate-700">風格理念</h4>
+                                <p class="text-slate-600">${data.philosophy}</p>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-slate-700">攝影目標</h4>
+                                <p class="text-slate-600">${data.photoGoal}</p>
+                            </div>
+                        </div>
+                    `;
+                    potDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            styleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    styleButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updatePotDisplay(button.dataset.style);
+                });
+            });
+
+            // Initial display
+            updatePotDisplay('system');
+
+
+            // Chart.js Soil Mixes for Taiwan Regions
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 10,
+                            boxWidth: 12,
+                            color: '#475569' // slate-600
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.raw + ' 份'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+            
+            // New color palette for charts
+            const chartColors = ['#475569', '#94a3b8', '#cbd5e1', '#6b7280']; // slate-600, slate-400, slate-300, gray-500
+            const chartLabels = ['蘭花樹皮', '浮石/珍珠岩', '椰糠', '蚯蚓糞/活性炭'];
+
+            // Northern Taiwan Mix
+            new Chart(document.getElementById('northChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: '北部配方 (份)',
+                        data: [4, 2, 3, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f8fafc', // slate-50
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Central Taiwan Mix
+            new Chart(document.getElementById('centralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: '中部配方 (份)',
+                        data: [3, 2, 4, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f8fafc',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Southern Taiwan Mix
+            new Chart(document.getElementById('southChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: '南部配方 (份)',
+                        data: [3, 2, 4, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f8fafc',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Eastern Taiwan Mix
+            new Chart(document.getElementById('eastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: '東部配方 (份)',
+                        data: [5, 2, 2, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f8fafc',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>藍冰柏 (Blue Ice) 商業攝影與栽培指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- New Color Palette: Cool & Sophisticated (Teal, Cyan, Slate) -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F1F5F9; /* slate-100 */
+            color: #1E293B; /* slate-800 */
+        }
+        .active-nav {
+            color: #0D9488; /* teal-600 */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #475569; /* slate-600 */
+        }
+        .active-tab {
+            background-color: #0D9488; /* teal-600 */
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .inactive-tab {
+            background-color: #CCFBF1; /* teal-100 */
+            color: #115E59; /* teal-800 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-slate-800">
+                    <span class="text-teal-600">藍冰柏</span>風格指南
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#identity" class="inactive-nav hover:text-teal-600 transition-colors duration-300">風格之源</a>
+                    <a href="#selector" class="inactive-nav hover:text-teal-600 transition-colors duration-300">盆器定位</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-teal-600 transition-colors duration-300">在地栽培</a>
+                    <a href="#profile" class="inactive-nav hover:text-teal-600 transition-colors duration-300">植物檔案</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-slate-700 hover:bg-slate-200 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 bg-white">
+            <a href="#identity" class="block py-2 inactive-nav">風格之源</a>
+            <a href="#selector" class="block py-2 inactive-nav">盆器定位</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">在地栽培</a>
+            <a href="#profile" class="block py-2 inactive-nav">植物檔案</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: Identity -->
+        <section id="identity" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">風格之源：從庭園到盆景</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">藍冰柏以其獨特的銀藍色針葉和優雅的錐形樹型聞名。它不僅是歐美庭園中的寵兒，更是現代景觀設計中創造視覺焦點的利器。我們的目標是將這份宏偉濃縮於盆中，創造出既適合銷售又上鏡的商品。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl mb-3 text-slate-800 flex items-center">
+                        <span class="text-2xl mr-2">🌍</span> 國際視野
+                    </h3>
+                    <p class="text-slate-700">在歐洲，它常用於構成主義庭園，與石材和簡潔線條搭配；在北美，它常見於鄉村風格的門廊裝飾，營造節日氛圍。這些都是我們攝影和風格定位的靈感來源。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl mb-3 text-slate-800 flex items-center">
+                        <span class="text-2xl mr-2">🏞️</span> 盆中的藝術
+                    </h3>
+                    <p class="text-slate-700">將藍冰柏盆栽化，不僅是縮小尺寸，更是提煉其精神。一個合適的盆器能突顯其色彩，襯托其形態，將其從一棵樹提升為一件「活的藝術品」。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Pot Selector -->
+        <section id="selector" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">盆器風格定位：互動選擇器</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">盆器是風格的延伸。點擊下方不同的市場定位，探索最適合您的商業攝影與銷售策略的盆器風格。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-style="minimalist" class="pot-style-btn px-5 py-2.5 rounded-full font-semibold transition-all duration-300 ease-in-out active-tab">現代極簡</button>
+                <button data-style="classic" class="pot-style-btn px-5 py-2.5 rounded-full font-semibold transition-all duration-300 ease-in-out inactive-tab">歐式經典</button>
+                <button data-style="rustic" class="pot-style-btn px-5 py-2.5 rounded-full font-semibold transition-all duration-300 ease-in-out inactive-tab">自然鄉村</button>
+                <button data-style="zen" class="pot-style-btn px-5 py-2.5 rounded-full font-semibold transition-all duration-300 ease-in-out inactive-tab">東方禪意</button>
+            </div>
+
+            <div id="pot-display" class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-slate-200 transition-opacity duration-500">
+                <!-- Content will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 3: Cultivation Guide -->
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">在地化栽培：台灣氣候介質方案</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">藍冰柏雖強健，但盆栽環境對介質要求極高。關鍵在於「卓越的排水性」與「穩定的結構」。我們針對台灣不同地區的氣候特點，設計了專屬的介質配方。</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-slate-200">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">北部潮濕氣候</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">冬季多雨潮濕，需最大化排水與透氣性，防止根部腐爛。</p>
+                        <div class="chart-container"><canvas id="mixNorthChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">中南部乾熱氣候</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">夏季炎熱乾燥，需在排水基礎上增加保水性，避免失水過快。</p>
+                        <div class="chart-container"><canvas id="mixCentralSouthChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">東部均衡氣候</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">氣候相對均衡，颱風季需注意盆栽穩定性，介質配方較為折衷。</p>
+                        <div class="chart-container"><canvas id="mixEastChart"></canvas></div>
+                    </div>
+                     <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">通用懶人配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">若不想區分，此配方在多數情況下安全可靠，但需依實際澆水習慣微調。</p>
+                        <div class="chart-container"><canvas id="mixGeneralChart"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-200">
+                    <h4 class="font-bold text-xl text-center mb-4">介質成分解析</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
+                        <div class="bg-slate-100 p-3 rounded-lg"><div class="text-3xl mb-1">🌋</div><h5 class="font-semibold">顆粒土</h5><p class="text-xs text-slate-500">赤玉土、鹿沼土等，提供結構與通氣</p></div>
+                        <div class="bg-slate-100 p-3 rounded-lg"><div class="text-3xl mb-1">🪨</div><h5 class="font-semibold">輕石</h5><p class="text-xs text-slate-500">浮石、蘭石等，極佳排水性</p></div>
+                        <div class="bg-slate-100 p-3 rounded-lg"><div class="text-3xl mb-1">🌲</div><h5 class="font-semibold">樹皮/椰塊</h5><p class="text-xs text-slate-500">增加有機質與透氣</p></div>
+                        <div class="bg-slate-100 p-3 rounded-lg"><div class="text-3xl mb-1">🥥</div><h5 class="font-semibold">泥炭土/椰纖</h5><p class="text-xs text-slate-500">基礎保水介質</p></div>
+                        <div class="bg-slate-100 p-3 rounded-lg"><div class="text-3xl mb-1">⚫</div><h5 class="font-semibold">竹炭/燻炭</h5><p class="text-xs text-slate-500">改善土質，防病菌</p></div>
+                        <div class="bg-slate-100 p-3 rounded-lg"><div class="text-3xl mb-1">🌿</div><h5 class="font-semibold">緩釋肥</h5><p class="text-xs text-slate-500">提供長期穩定養分</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Plant Profile -->
+        <section id="profile" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">植物速覽檔案</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">快速掌握藍冰柏的核心美學與生長特徵。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">💧</div>
+                    <h3 class="text-xl font-bold mb-2">耐旱忌濕</h3>
+                    <p class="text-slate-600">根系對過度潮濕非常敏感，澆水原則是「乾透澆透」，盆土排水性是存活關鍵。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">☀️</div>
+                    <h3 class="text-xl font-bold mb-2">喜愛陽光</h3>
+                    <p class="text-slate-600">喜愛充足陽光，建議每日至少接受 <strong class="text-teal-600">6-8 小時</strong> 的直射光照，以維持其最亮麗的冰藍色澤。光照不足會導致顏色偏綠、枝條稀疏。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">🌲</div>
+                    <h3 class="text-xl font-bold mb-2">優雅樹型</h3>
+                    <p class="text-slate-600">自然的錐形結構，無需過多修剪。適當摘心可使其更為茂密，形態更飽滿。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">❄️</div>
+                    <h3 class="text-xl font-bold mb-2">耐寒耐熱</h3>
+                    <p class="text-slate-600">生命力強健，既耐高溫也耐寒冷，能適應台灣絕大多數地區的氣候。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 mt-16">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>藍冰柏商業攝影與栽培指南 | 助您創造商業價值</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Close mobile menu when a link is clicked
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Pot Selector Data
+            const potStyles = {
+                minimalist: {
+                    title: '現代極簡：銀藍的幾何雕塑',
+                    materials: '啞光陶瓷 (黑、白、灰)、素色水泥盆、簡潔線條的金屬盆',
+                    philosophy: '去除所有多餘裝飾，讓盆器成為一個中性的幾何基座。這種風格能最大程度地突顯藍冰柏本身的錐形形態和獨特的銀藍色澤，創造出如雕塑品般的高級感。',
+                    photoGoal: '在高對比或單色背景下拍攝，強調線條與形狀。可利用陰影創造圖形感，打造雜誌般的室內設計風格照片，吸引追求品味的年輕客群。'
+                },
+                classic: {
+                    title: '歐式經典：庭園的優雅再現',
+                    materials: '帶有簡約線腳的陶盆或石盆、仿古銅色或鉛色的盆器',
+                    philosophy: '借鑒歐洲古典庭園的元素，選擇穩重、帶有傳統細節的盆器。這種風格能喚起人們對莊園、城堡的聯想，賦予藍冰柏一種永恆、典雅的氣質。',
+                    photoGoal: '在戶外光線下，搭配石牆、木質甲板等背景拍攝。營造一種精緻、悠閒的庭園生活氛圍，吸引嚮往經典風格的成熟客戶。'
+                },
+                rustic: {
+                    title: '自然鄉村：溫暖的節日氣息',
+                    materials: '粗陶、木桶、鍍鋅鐵皮桶、素燒陶盆',
+                    philosophy: '強調材質的原始質感，營造一種溫暖、質樸、貼近自然的感覺。這種風格特別適合用來營造聖誕節等節日氛圍，讓人感覺親切而舒適。',
+                    photoGoal: '搭配木質家具、格紋織品或溫暖的燈光進行場景佈置。創造出溫馨、有故事感的生活風格照片，非常適合在社群媒體上分享。'
+                },
+                zen: {
+                    title: '東方禪意：寧靜的藍色山景',
+                    materials: '淺口的沙色或灰色陶盆、帶有冰裂紋的釉面盆、仿岩石質感的盆器',
+                    philosophy: '將藍冰柏視為一座微縮的、覆蓋著冰雪的山。搭配簡潔、低矮、具有水平感的盆器，並留出「留白」空間，營造出寧靜、致遠的東方禪意美學。',
+                    photoGoal: '使用乾淨的背景，搭配苔蘚、白砂或幾塊奇石作為點綴。光線要柔和，構圖要簡潔，旨在傳達一種平和、冥想的氛圍，吸引尋求心靈平靜的客群。'
+                }
+            };
+
+            const potDisplay = document.getElementById('pot-display');
+            const styleButtons = document.querySelectorAll('.pot-style-btn');
+
+            function updatePotDisplay(style) {
+                const data = potStyles[style];
+                potDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    potDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-slate-700">推薦材質</h4>
+                                <p class="text-slate-600 mb-4">${data.materials}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-slate-700">風格理念</h4>
+                                <p class="text-slate-600">${data.philosophy}</p>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-semibold text-lg mb-2 text-teal-600">攝影目標</h4>
+                                <p class="text-slate-600">${data.photoGoal}</p>
+                            </div>
+                        </div>
+                    `;
+                    potDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            styleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    styleButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updatePotDisplay(button.dataset.style);
+                });
+            });
+
+            // Initial display
+            updatePotDisplay('minimalist');
+
+
+            // Chart.js Soil Mixes
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 10 },
+                            padding: 10,
+                            boxWidth: 12
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.parsed + ' 份'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+
+            const chartColors = ['#475569', '#64748B', '#94A3B8', '#CBD5E1', '#334155', '#0F172A'].reverse();
+            const commonLabels = ['顆粒土', '輕石', '樹皮/椰塊', '泥炭土/椰纖', '竹炭/燻炭'];
+            const chartBorderColor = '#F1F5F9';
+
+            new Chart(document.getElementById('mixNorthChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: commonLabels,
+                    datasets: [{ data: [4, 4, 1, 1, 1], backgroundColor: chartColors, borderColor: chartBorderColor, borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+
+            new Chart(document.getElementById('mixCentralSouthChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: commonLabels,
+                    datasets: [{ data: [3, 3, 2, 2, 1], backgroundColor: chartColors, borderColor: chartBorderColor, borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+
+            new Chart(document.getElementById('mixEastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: commonLabels,
+                    datasets: [{ data: [3, 4, 1, 2, 1], backgroundColor: chartColors, borderColor: chartBorderColor, borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+            
+            new Chart(document.getElementById('mixGeneralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: commonLabels,
+                    datasets: [{ data: [3, 3, 1, 2, 1], backgroundColor: chartColors, borderColor: chartBorderColor, borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

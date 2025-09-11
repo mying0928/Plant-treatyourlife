@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式草莓栽培指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 
+      Application Structure Plan: 
+      This SPA is an interactive guide for Strawberry growers in Taiwan, adapted from the user's preferred layout.
+      1. Hero Section: Introduces the "Strawberry Revolution" in Taiwan, focusing on the shift to soilless, high-trellis cultivation.
+      2. Interactive Goal Selector: Replaces the pot selector. Users choose a cultivation goal (e.g., Yield vs. Quality), and the tool displays the scientifically-backed medium recipe and management advice from the research.
+      3. Regional Cultivation Guide: The core of the application. It uses four Chart.js doughnut charts to visualize the specific medium recipes for Northern, Central, Southern, and Eastern Taiwan, making the complex data from the report easy to digest.
+      4. Keys to Success Section: Replaces the plant profile. It highlights critical success factors for modern strawberry cultivation (High-Trellis, Sterilization, Fertigation, Resistant Varieties, and Light).
+      This structure maintains the original's interactivity while delivering targeted, practical information for strawberry cultivation.
+    -->
+    <!-- 
+      Visualization & Content Choices:
+      1. Report Info: Yield vs. Quality recipes (C-1, C-2 from report) -> Goal: Compare & Decide -> Viz/Method: JS-powered interactive card display. Interaction: User clicks a "Goal" button to dynamically update a display area. Justification: More engaging and actionable than static text. Library: Vanilla JS.
+      2. Report Info: Regional medium recipes (N-1, C-1, S-1, E-1 from report) -> Goal: Inform & Compare -> Viz/Method: Four Chart.js doughnut charts. Interaction: Charts provide an immediate visual understanding of proportions. Hovering shows details. Justification: Directly addresses the user's request for regional formulas in a highly comprehensible format. Library: Chart.js.
+      3. Report Info: Key cultivation concepts (High-trellis, sterilization, etc.) -> Goal: Inform -> Viz/Method: Styled HTML cards with icons. Interaction: Static display for quick, scannable reference. Justification: Clearly presents the foundational pillars of the modern cultivation strategy. Library: Tailwind CSS.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F5F5F4; /* stone-100 */
+            color: #262626; /* neutral-800 */
+        }
+        .active-nav {
+            color: #e11d48; /* rose-600 */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #525252; /* neutral-600 */
+        }
+        .active-tab {
+            background-color: #be123c; /* rose-700 */
+            color: #f5f5f4;
+        }
+        .inactive-tab {
+            background-color: #e5e5e5; /* neutral-200 */
+            color: #525252; /* neutral-600 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 220px; /* Adjusted for 4 charts */
+            height: auto;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-stone-50/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-neutral-800">
+                    <span class="text-rose-600">草莓</span>栽培聖經
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#revolution" class="inactive-nav hover:text-rose-600 transition-colors duration-300">栽培革命</a>
+                    <a href="#selector" class="inactive-nav hover:text-rose-600 transition-colors duration-300">目標設定</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-rose-600 transition-colors duration-300">介質指南</a>
+                    <a href="#success" class="inactive-nav hover:text-rose-600 transition-colors duration-300">成功關鍵</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-neutral-700 hover:bg-neutral-200 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2">
+            <a href="#revolution" class="block py-2 inactive-nav">栽培革命</a>
+            <a href="#selector" class="block py-2 inactive-nav">目標設定</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">介質指南</a>
+            <a href="#success" class="block py-2 inactive-nav">成功關鍵</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Strawberry Revolution -->
+        <section id="revolution" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">台灣草莓栽培革命</h2>
+                <p class="max-w-3xl mx-auto text-lg text-neutral-600">傳統土耕面臨連作障礙與土傳病害的嚴峻挑戰。高架無土栽培不僅是技術升級，更是確保產量穩定、提升果實品質的永續經營策略。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200">
+                    <h3 class="font-bold text-xl mb-3 text-rose-600 flex items-center">
+                        <span class="text-2xl mr-2">🛡️</span>風險管理
+                    </h3>
+                    <p class="text-neutral-700">高架栽培從物理上隔絕了土壤中的病原菌，如黃萎病和炭疽病，從根本上解決了數十年來困擾產業的土傳病害問題，大幅降低作物損失風險。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200">
+                    <h3 class="font-bold text-xl mb-3 text-pink-700 flex items-center">
+                        <span class="text-2xl mr-2">💡</span>經營轉型
+                    </h3>
+                    <p class="text-neutral-700">從「土壤管理者」轉變為「精準水養管理者」。雖然初期投資較高，但能換來更穩定的產量、更低的勞力與農藥成本，實現可預測的現金流。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Goal Selector -->
+        <section id="selector" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">互動式栽培目標設定</h2>
+                <p class="max-w-3xl mx-auto text-lg text-neutral-600">您的栽培目標是什麼？不同的目標需要不同的介質配方與管理策略。點擊下方選項，探索經科學驗證的最佳實踐路徑。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-goal="yield" class="goal-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm active-tab">產量導向</button>
+                <button data-goal="quality" class="goal-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">品質導向</button>
+            </div>
+
+            <div id="goal-display" class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-neutral-200 transition-opacity duration-500">
+                <!-- Content will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 3: Cultivation Guide -->
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">台灣分區介質指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-neutral-600">健康的根系是高產量與高品質的基礎。針對台灣各區氣候挑戰，我們提供精準的介質配方，確保您的草莓園欣欣向榮。</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-neutral-200">
+                <div class="mb-8">
+                     <h3 class="font-bold text-2xl text-center mb-4 text-neutral-700">介質的科學：平衡保水與通氣</h3>
+                     <p class="text-center max-w-2xl mx-auto text-neutral-600">草莓根系淺且敏感，需要持續的水分，但極度害怕缺氧環境。理想介質的核心是在<strong class="text-rose-600">優異的排水通氣性</strong>與<strong class="text-rose-600">足夠的保水能力</strong>之間取得完美平衡。</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">北部配方</h4>
+                        <p class="text-sm text-neutral-500 mb-4 h-12">應對濕冷冬季，將通氣性置於最優先，預防根部病害。</p>
+                        <div class="chart-container"><canvas id="northChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">中部配方</h4>
+                        <p class="text-sm text-neutral-500 mb-4 h-12">氣候均衡，採用經本地驗證的高性能配方，追求產量最大化。</p>
+                        <div class="chart-container"><canvas id="centralChart"></canvas></div>
+                    </div>
+                     <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">南部配方</h4>
+                        <p class="text-sm text-neutral-500 mb-4 h-12">對抗高溫與強降雨，強調保水與快速排水的雙重韌性。</p>
+                        <div class="chart-container"><canvas id="southChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">東部配方</h4>
+                        <p class="text-sm text-neutral-500 mb-4 h-12">抵禦颱風豪雨，首重極致排水能力與介質穩定性。</p>
+                        <div class="chart-container"><canvas id="eastChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Keys to Success -->
+        <section id="success" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">栽培成功五大關鍵</h2>
+                <p class="max-w-3xl mx-auto text-lg text-neutral-600">現代草莓栽培是一套系統工程。掌握以下五大關鍵，是實現永續生產的基石。</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">🏞️</div>
+                    <h3 class="text-xl font-bold mb-2">高架設施</h3>
+                    <p class="text-neutral-600">採用高架植床，從物理上隔絕土傳病害，並改善勞動條件，是現代化栽培的第一步。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">☀️</div>
+                    <h3 class="text-xl font-bold mb-2">光照需求</h3>
+                    <p class="text-neutral-600">每日至少需6-8小時直射陽光以促進光合作用、累積糖分並幫助果實著色，是高產量與高品質的保證。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">🧬</div>
+                    <h3 class="text-xl font-bold mb-2">抗病品種</h3>
+                    <p class="text-neutral-600">選用如「戀香」等抗病性較佳的品種，建立生物防線，能有效降低農藥使用與管理成本。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">🔬</div>
+                    <h3 class="text-xl font-bold mb-2">介質消毒</h3>
+                    <p class="text-neutral-600">使用前對介質進行蒸汽消毒（70°C, 30分鐘），確保「乾淨的起點」，是預防性病害管理的基石。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">💧</div>
+                    <h3 class="text-xl font-bold mb-2">水肥管理</h3>
+                    <p class="text-neutral-600">定期監測灌溉水與排出液的pH/EC值，精準調控養分供應，是無土栽培的核心技術。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-neutral-800 text-neutral-300 mt-16">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>互動式草莓栽培指南 | 為豐收而設計</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Goal Selector Data based on Strawberry Research
+            const cultivationGoals = {
+                yield: {
+                    title: '產量導向策略',
+                    recipe: '80% 泥炭土 + 20% 珍珠石 (體積比 4:1)',
+                    philosophy: '此配方經桃園農改場科學驗證，能達到最高的早期產量與總產量。高比例的泥炭土提供絕佳的保水保肥能力，支持植株快速生長與結果，是追求產量最大化的首選。',
+                    managementTip: '此配方緩衝能力強，但對精準的水肥管理要求高。需密切監控EC值，避免鹽分累積，並確保灌溉均勻，以發揮最大生長潛力。'
+                },
+                quality: {
+                    title: '品質導向策略',
+                    recipe: '67% 泥炭土 + 33% 稻殼 (體積比 2:1)',
+                    philosophy: '此配方同樣經桃園農改場驗證，能生產出可溶性固形物含量（甜度）最高的果實。稻殼增加了介質的通氣性，輕微的生長逆境有助於糖分累積，適合主攻高端鮮食市場。',
+                    managementTip: '稻殼分解緩慢且幾乎不含養分。管理上需注意氮肥的適當補充，並利用其優良的通氣性，透過水分控制來調節植株長勢，進一步提升果實風味。'
+                }
+            };
+
+            const goalDisplay = document.getElementById('goal-display');
+            const goalButtons = document.querySelectorAll('.goal-btn');
+
+            function updateGoalDisplay(goal) {
+                const data = cultivationGoals[goal];
+                goalDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    goalDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-neutral-800">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-neutral-700">推薦介質配方</h4>
+                                <p class="text-neutral-600 mb-4 font-medium">${data.recipe}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-neutral-700">配方理念</h4>
+                                <p class="text-neutral-600">${data.philosophy}</p>
+                            </div>
+                            <div class="bg-neutral-100 p-4 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-rose-600">關鍵管理提示</h4>
+                                <p class="text-neutral-600">${data.managementTip}</p>
+                            </div>
+                        </div>
+                    `;
+                    goalDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            goalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    goalButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updateGoalDisplay(button.dataset.goal);
+                });
+            });
+
+            // Initial display
+            updateGoalDisplay('yield');
+
+
+            // Chart.js Soil Mixes for Taiwan Regions
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 10,
+                            boxWidth: 12
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.raw + '%'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+
+            const chartColors = ['#7f5539', '#a68a64', '#c4a385', '#e6ccb2', '#582f0e'];
+
+            // Northern Taiwan Mix (N-1)
+            new Chart(document.getElementById('northChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['泥炭土', '珍珠石', '稻殼'],
+                    datasets: [{
+                        label: '北部配方 (%)',
+                        data: [40, 40, 20],
+                        backgroundColor: chartColors,
+                        borderColor: '#F5F5F4',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Central Taiwan Mix (C-1)
+            new Chart(document.getElementById('centralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['泥炭土', '珍珠石'],
+                    datasets: [{
+                        label: '中部配方 (%)',
+                        data: [80, 20],
+                        backgroundColor: chartColors,
+                        borderColor: '#F5F5F4',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Southern Taiwan Mix (S-1)
+            new Chart(document.getElementById('southChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '泥炭土', '珍珠石'],
+                    datasets: [{
+                        label: '南部配方 (%)',
+                        data: [60, 20, 20],
+                        backgroundColor: chartColors,
+                        borderColor: '#F5F5F4',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Eastern Taiwan Mix (E-1)
+            new Chart(document.getElementById('eastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['泥炭土', '發泡煉石', '稻殼'],
+                    datasets: [{
+                        label: '東部配方 (%)',
+                        data: [40, 40, 20],
+                        backgroundColor: chartColors,
+                        borderColor: '#F5F5F4',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

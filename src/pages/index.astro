@@ -1,0 +1,31 @@
+---
+import { plantData } from '../data/plants.js';
+import PlantCard from '../components/PlantCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Search from '../components/Search.astro';
+import FloatingButtons from '../components/FloatingButtons.astro';
+
+const sortedData = [...plantData].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant'));
+---
+<BaseLayout title="植物養護紀錄 - 入口網站">
+    <div class="container mx-auto px-4 py-8 md:py-16 relative z-10">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-sky-400 dark:text-sky-300 font-chenyu">植物養護紀錄</h1>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">記錄每一棵植物的成長，分享專業的養護心得。</p>
+        </header>
+        <Search />
+        <main>
+            <div id="plantGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+                {sortedData.map(plant => (
+                    <PlantCard plant={plant} />
+                ))}
+            </div>
+            <div id="noResultsMessage" class="text-center text-gray-500 dark:text-gray-400 py-10 hidden">
+                <h3 class="text-2xl font-semibold">找不到結果</h3>
+                <p class="mt-2">抱歉，沒有找到符合「<span id="searchTermDisplay" class="font-semibold text-gray-300"></span>」的植物。</p>
+            </div>
+        </main>
+    </div>
+    <FloatingButtons />
+</BaseLayout>
+

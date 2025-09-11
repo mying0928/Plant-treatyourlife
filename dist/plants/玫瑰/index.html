@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式玫瑰（Rose）銷售指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 
+      Application Structure Plan: 
+      This SPA is designed as an interactive guide for a Rose seller, adapting the user's provided structure.
+      1. Hero Section: Introduces the "Rose Phenomenon," highlighting its cultural and market value.
+      2. Interactive Style Selector: Replaces the pot selector with a more relevant "Style & Use" selector for roses (e.g., Garden, Cut Flower, Gifting).
+      3. Regional Cultivation Guide: The core of the user's request. It uses four Chart.js doughnut charts to visualize the specific soil recipes from the provided research document for Northern, Central, Southern, and Eastern Taiwan.
+      4. Plant Profile: Highlights key selling points for roses, including flower form, fragrance, and the user-requested lighting requirements.
+      This structure maintains the desired aesthetic while tailoring the content specifically to roses.
+    -->
+    <!-- 
+      Visualization & Content Choices:
+      1. Report Info: Rose styling/use cases -> Goal: Compare & Decide -> Viz/Method: JS-powered interactive card display. Interaction: User clicks a "Style" button to dynamically update a display area with relevant variety info and presentation advice. Justification: More engaging and practical for a sales guide than a static list. Library: Vanilla JS.
+      2. Report Info: Regional soil mix recipes from the rose document -> Goal: Inform & Compare -> Viz/Method: Four Chart.js doughnut charts. Interaction: Charts visually represent component proportions. Hovering shows details. Justification: Visual charts make complex ratios easy to grasp, directly addressing the user's primary request. Library: Chart.js.
+      3. Report Info: Rose's key traits -> Goal: Inform -> Viz/Method: Styled HTML cards with icons, including the specifically requested "Lighting Needs". Interaction: Static display for quick reference. Justification: Clear, scannable presentation. Library: Tailwind CSS.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FFF1F2; /* rose-50 */
+            color: #374151; /* gray-700 */
+        }
+        .active-nav {
+            color: #E11D48; /* rose-600 */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #4B5563; /* gray-600 */
+        }
+        .active-tab {
+            background-color: #9F1239; /* rose-800 */
+            color: #FFF1F2; /* rose-50 */
+        }
+        .inactive-tab {
+            background-color: #FFE4E6; /* rose-100 */
+            color: #9F1239; /* rose-800 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 220px; /* Adjusted for 4 charts */
+            height: auto;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-rose-50/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+                    <span class="text-rose-700">玫瑰</span>商業聖經
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#phenomenon" class="inactive-nav hover:text-rose-600 transition-colors duration-300">玫瑰現象</a>
+                    <a href="#selector" class="inactive-nav hover:text-rose-600 transition-colors duration-300">風格定位</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-rose-600 transition-colors duration-300">介質指南</a>
+                    <a href="#profile" class="inactive-nav hover:text-rose-600 transition-colors duration-300">植株檔案</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-rose-100 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2">
+            <a href="#phenomenon" class="block py-2 inactive-nav">玫瑰現象</a>
+            <a href="#selector" class="block py-2 inactive-nav">風格定位</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">介質指南</a>
+            <a href="#profile" class="block py-2 inactive-nav">植株檔案</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Rose Phenomenon -->
+        <section id="phenomenon" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">玫瑰現象：從經典到潮流的價值再造</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">玫瑰，作為愛與美的永恆象徵，其商業價值歷久不衰。從庭園景觀到精緻花禮，健康的植株與完美的開花表現，是連結園藝科學與高端市場的橋樑。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-rose-100">
+                    <h3 class="font-bold text-xl mb-3 text-rose-700 flex items-center">
+                        <span class="text-2xl mr-2">📈</span>市場價值
+                    </h3>
+                    <p class="text-gray-700">特殊花色、強健抗病性或具獨特香味的品種，在市場上具有高度價值。成功的商業模式，在於培育出超越客戶期待的健壯植株。</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-rose-100">
+                    <h3 class="font-bold text-xl mb-3 text-pink-600 flex items-center">
+                        <span class="text-2xl mr-2">🎯</span>商業策略
+                    </h3>
+                    <p class="text-gray-700">本指南將介質、栽培管理與最終的產品呈現視為一個整體。目標是打造出花繁葉茂、具備高觀賞價值的玫瑰產品，贏得市場口碑。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Style Selector -->
+        <section id="selector" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">風格定位：互動銷售指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">不同的玫瑰有不同的魅力與用途。點擊下方不同的風格定位，探索最能彰顯其價值的商業策略。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-style="balcony" class="rose-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm active-tab">陽台浪漫風</button>
+                <button data-style="garden" class="rose-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">經典庭園風</button>
+                <button data-style="cutflower" class="rose-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">精緻切花風</button>
+                <button data-style="gifting" class="rose-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">主題節慶禮</button>
+            </div>
+
+            <div id="rose-display" class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-rose-100 transition-opacity duration-500">
+                <!-- Content will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 3: Cultivation Guide -->
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">台灣分區介質指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">根據您的研究報告，我們為台灣各區氣候提供精準的介質配方，這是培育健壯玫瑰、使其開花繁盛的成功基石。</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-rose-100">
+                <div class="mb-8">
+                    <h3 class="font-bold text-2xl text-center mb-4 text-gray-700">介質的科學：打造理想根系環境</h3>
+                    <p class="text-center max-w-2xl mx-auto text-gray-600">玫瑰根系需要<strong class="text-rose-700">絕佳的排水與通氣性</strong>以預防病害，同時又需<strong class="text-rose-700">穩定的水份與肥份</strong>供應。理想介質能在兩者間取得完美平衡，這在台灣潮濕多雨的環境中至關重要。</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">北部配方</h4>
+                        <p class="text-sm text-gray-500 mb-4 h-12">針對全年高濕多雨，以極致排水與通氣為最優先考量。</p>
+                        <div class="chart-container"><canvas id="northChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">中部配方</h4>
+                        <p class="text-sm text-gray-500 mb-4 h-12">平衡型配方，兼顧夏季排水與冬季乾旱時的保水需求。</p>
+                        <div class="chart-container"><canvas id="centralChart"></canvas></div>
+                    </div>
+                     <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">南部配方</h4>
+                        <p class="text-sm text-gray-500 mb-4 h-12">強化保水力以對抗酷暑，同時確保雨季時排水順暢。</p>
+                        <div class="chart-container"><canvas id="southChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">東部配方</h4>
+                        <p class="text-sm text-gray-500 mb-4 h-12">增加介質重量與結構穩定性，以抵抗颱風強風與豪雨。</p>
+                        <div class="chart-container"><canvas id="eastChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Plant Profile -->
+        <section id="profile" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">植株速覽檔案</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">快速掌握玫瑰的核心美學與商業賣點。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-rose-100 text-center">
+                    <div class="text-4xl mb-3">☀️</div>
+                    <h3 class="text-xl font-bold mb-2">光照需求</h3>
+                    <p class="text-gray-600">玫瑰是全日照植物，每日至少需要 <strong class="text-rose-700">6-8 小時</strong>的直射陽光，充足光照是開花品質與數量的絕對保證。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-rose-100 text-center">
+                    <div class="text-4xl mb-3">🌸</div>
+                    <h3 class="text-xl font-bold mb-2">花型與花色</h3>
+                    <p class="text-gray-600">從古典的杯型到現代的簇開型，多變的花型與色彩是玫瑰最主要的觀賞價值與賣點。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-rose-100 text-center">
+                    <div class="text-4xl mb-3">🍃</div>
+                    <h3 class="text-xl font-bold mb-2">健康葉片</h3>
+                    <p class="text-gray-600">油亮、無病斑的健康葉片是植株強健的象徵，能有效襯托花朵的美麗，提升整體價值。</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg border border-rose-100 text-center">
+                    <div class="text-4xl mb-3">👃</div>
+                    <h3 class="text-xl font-bold mb-2">迷人香氣</h3>
+                    <p class="text-gray-600">果香、茶香或古典大馬士革香氣，是許多品種的獨特魅力，能創造嗅覺上的附加價值。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 mt-16">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>互動式玫瑰銷售指南 | 為商業成功而生</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Rose Style Selector Data
+            const roseStyles = {
+                balcony: {
+                    title: '陽台浪漫風：打造都市花園',
+                    materials: '豐花/中輪灌木玫瑰、迷你玫瑰。搭配具設計感、排水良好的盆器。',
+                    philosophy: '針對空間有限的都市族群，主打在陽台也能輕鬆享受玫瑰盛開的浪漫。選擇開花性好、植株不至過於巨大的品種是關鍵。',
+                    photoGoal: '在陽光灑落的陽台場景拍攝，搭配咖啡桌、書籍，營造悠閒的生活風格。強調花朵在生活空間中的點綴效果。'
+                },
+                garden: {
+                    title: '經典庭園風：建立傳世花園',
+                    materials: '英國玫瑰、灌木玫瑰、蔓性玫瑰。適合地植或大型樹酯盆、陶盆。',
+                    philosophy: '針對擁有庭院的客群，提供能形塑花園景觀的經典品種。強調其生長潛力、抗病性與作為花園主角的氣勢。',
+                    photoGoal: '拍攝玫瑰在庭園中成叢、成片或爬滿花架的樣貌。展現其融入環境、創造景深的強大能力，吸引園藝愛好者。'
+                },
+                cutflower: {
+                    title: '精緻切花風：享受瓶插之美',
+                    materials: '雜交茶香玫瑰(HT)、豐花玫瑰(FL)。強調莖幹直立、花梗長、瓶插壽命長的品種。',
+                    philosophy: '滿足希望將花園中的美麗帶入室內的客群。銷售重點在於花朵本身的完美形態、色澤與瓶插表現。',
+                    photoGoal: '拍攝乾淨背景下的單枝或數枝切花，置於簡約的花瓶中。特寫花瓣的細節與光澤，呈現如花店般的高級質感。'
+                },
+                gifting: {
+                    title: '主題節慶禮：傳遞心意首選',
+                    materials: '花色討喜、名稱具特殊意義的盆花玫瑰。搭配精美包裝與裝飾性套盆。',
+                    philosophy: '將盆栽玫瑰定位為有生命力的、可持續的禮物。在情人節、母親節等節日，這是傳統花束之外的絕佳選擇。',
+                    photoGoal: '展示搭配緞帶、卡片的完整禮品樣貌。可由模特兒手持，或置於禮物堆中，營造濃厚的節慶氛圍與送禮情境。'
+                }
+            };
+
+            const roseDisplay = document.getElementById('rose-display');
+            const styleButtons = document.querySelectorAll('.rose-style-btn');
+
+            function updateRoseDisplay(style) {
+                const data = roseStyles[style];
+                roseDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    roseDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-gray-700">推薦類型與資材</h4>
+                                <p class="text-gray-600 mb-4">${data.materials}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-gray-700">風格理念</h4>
+                                <p class="text-gray-600">${data.philosophy}</p>
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-rose-700">攝影目標</h4>
+                                <p class="text-gray-600">${data.photoGoal}</p>
+                            </div>
+                        </div>
+                    `;
+                    roseDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            styleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    styleButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updateRoseDisplay(button.dataset.style);
+                });
+            });
+
+            // Initial display
+            updateRoseDisplay('balcony');
+
+
+            // Chart.js Soil Mixes for Taiwan Regions based on Rose Research
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 10 },
+                            padding: 8,
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.raw + '%'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+
+            const chartColors = ['#7f5539', '#a68a64', '#c4a385', '#e6ccb2', '#582f0e', '#d4a373'];
+
+            // Northern Taiwan Mix
+            new Chart(document.getElementById('northChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '珍珠石', '碳化稻殼', '堆肥', '竹炭'],
+                    datasets: [{
+                        label: '北部配方 (%)',
+                        data: [40, 30, 15, 10, 5],
+                        backgroundColor: chartColors,
+                        borderColor: '#FFFFFF',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Central Taiwan Mix
+            new Chart(document.getElementById('centralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '珍珠石', '堆肥', '蛭石', '碳化稻殼'],
+                    datasets: [{
+                        label: '中部配方 (%)',
+                        data: [35, 20, 20, 15, 10],
+                        backgroundColor: chartColors,
+                        borderColor: '#FFFFFF',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Southern Taiwan Mix
+            new Chart(document.getElementById('southChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '蛭石', '堆肥', '浮石', '碳化稻殼'],
+                    datasets: [{
+                        label: '南部配方 (%)',
+                        data: [45, 20, 15, 10, 10],
+                        backgroundColor: chartColors,
+                        borderColor: '#FFFFFF',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Eastern Taiwan Mix
+            new Chart(document.getElementById('eastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '赤玉土', '浮石', '堆肥', '竹炭'],
+                    datasets: [{
+                        label: '東部配方 (%)',
+                        data: [30, 25, 20, 15, 10],
+                        backgroundColor: chartColors,
+                        borderColor: '#FFFFFF',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

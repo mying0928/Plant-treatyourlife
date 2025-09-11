@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式白斑合果芋 (Syngonium Albo) 商業攝影與栽培指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!--  
+        Application Structure Plan:  
+        This SPA is an interactive guide for selling Syngonium podophyllum 'Albo-variegatum' with a new green color theme.
+        1. Hero Section: Introduces the Syngonium as a "Canvas of Light and Shadow".
+        2. Interactive Pot Selector: A dynamic tool for choosing pot styles.
+        3. Cultivation Guide: Soil mix charts for Taiwan regions.
+        4. NEW Lighting Section: A dedicated section explaining the crucial lighting requirements for maintaining variegation.
+        5. Plant Profile: Highlights key aesthetic selling points.
+        This structure incorporates the new user request for lighting information and a complete visual overhaul.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+            color: #1e293b; /* slate-800 */
+        }
+        .active-nav {
+            color: #059669; /* emerald-600 */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #475569; /* slate-600 */
+        }
+        .active-tab {
+            background-color: #065f46; /* emerald-800 */
+            color: #f8fafc; /* slate-50 */
+        }
+        .inactive-tab {
+            background-color: #e2e8f0; /* slate-200 */
+            color: #475569; /* slate-600 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-slate-50/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-slate-800">
+                    <span class="text-emerald-700">白斑合果芋</span>商業指南
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#phenomenon" class="inactive-nav hover:text-emerald-600 transition-colors duration-300">光影畫布</a>
+                    <a href="#selector" class="inactive-nav hover:text-emerald-600 transition-colors duration-300">盆器風格</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-emerald-600 transition-colors duration-300">介質指南</a>
+                    <a href="#lighting" class="inactive-nav hover:text-emerald-600 transition-colors duration-300">光照需求</a>
+                    <a href="#profile" class="inactive-nav hover:text-emerald-600 transition-colors duration-300">核心美學</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-slate-700 hover:bg-slate-200 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2">
+            <a href="#phenomenon" class="block py-2 inactive-nav">光影畫布</a>
+            <a href="#selector" class="block py-2 inactive-nav">盆器風格</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">介質指南</a>
+            <a href="#lighting" class="block py-2 inactive-nav">光照需求</a>
+            <a href="#profile" class="block py-2 inactive-nav">核心美學</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Syngonium Phenomenon -->
+        <section id="phenomenon" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">光影畫布：白斑合果芋的商業藝術</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">白斑合果芋 (Syngonium podophyllum 'Albo-variegatum') 如同一張流動的光影畫布。其千變萬化的雪白斑紋，搭配優雅的箭形葉與藤蔓姿態，使其能完美融入各種室內風格，是當代植物市場的寵兒。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl mb-3 text-emerald-700 flex items-center">
+                        <span class="text-2xl mr-2">🎨</span>品牌定位：百搭的藝術品
+                    </h3>
+                    <p class="text-slate-700">將其「易於養護」與「高顏值」的特點最大化。您的敘事應是：「無論您是新手或藏家，白斑合果芋都能輕鬆點亮您的空間。我們提供的不僅是植物，更是一件能與您一同成長的百搭藝術品。」</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-xl mb-3 text-teal-700 flex items-center">
+                        <span class="text-2xl mr-2">🎁</span>策展式銷售
+                    </h3>
+                    <p class="text-slate-700">提供「風格解決方案」。您的產品應包含：健康的植株、精心搭配的設計師盆器、攀爬用的造型苔蘚棒，以及為顧客所在地量身訂製的介質包。將銷售升級為提供完整的風格體驗。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Pot Selector -->
+        <section id="selector" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">盆器風格：全球視野下的攝影指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">盆器是風格的延伸，是為這片光影畫布搭建的展台。點擊下方源於全球市場分析的風格定位，探索最能提升白斑合果芋商業價值的視覺策略。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-style="minimalist" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm active-tab">極簡現代</button>
+                <button data-style="natural" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">自然質樸</button>
+                <button data-style="nordic" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">北歐清新</button>
+                <button data-style="luxury" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">輕奢精緻</button>
+                <button data-style="functional" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">機能組合</button>
+            </div>
+
+            <div id="pot-display" class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-slate-200 transition-opacity duration-500">
+                <!-- Content will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 3: Cultivation Guide -->
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">健康的基石：台灣各區客製化介質配方</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">健康的根系是美麗的源頭。合果芋雖強健，但理想的介質能讓它長得更快、斑紋更美。關鍵在於<strong class="text-emerald-700">保水、透氣、微酸</strong>三者的平衡。以下是為台灣各區氣候量身打造的精準配方。</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-slate-200">
+                 <div class="mb-8">
+                    <h3 class="font-bold text-2xl text-center mb-4 text-slate-700">介質的科學：打造會呼吸的土壤</h3>
+                    <p class="text-center max-w-2xl mx-auto text-slate-600">作為天南星科植物，合果芋的根系需要充足的氧氣。一個疏鬆、富含有機質且排水良好的微酸性介質，能有效促進根系發展，預防爛根，並有助於維持漂亮的斑葉性狀。</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">北部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">強效透氣配方：應對冬季濕冷，確保介質不會長時間處於飽和狀態，防止爛根。</p>
+                        <div class="chart-container"><canvas id="northChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">中部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">經典均衡配方：氣候穩定，注重保水、透氣與緩效肥力的完美平衡。</p>
+                        <div class="chart-container"><canvas id="centralChart"></canvas></div>
+                    </div>
+                     <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">南部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">保水透氣配方：應對強日照下的快速蒸散，同時確保夏季大雨時的排水效率。</p>
+                        <div class="chart-container"><canvas id="southChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">東部配方</h4>
+                        <p class="text-sm text-slate-500 mb-4 h-12">穩定快排配方：應對颱風季的瞬間強降雨，增加介質重量以穩定盆器。</p>
+                        <div class="chart-container"><canvas id="eastChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Lighting Requirements -->
+        <section id="lighting" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">光照需求：斑葉的秘密</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">光線是決定白斑合果芋<strong class="text-emerald-700">斑紋表現</strong>與<strong class="text-emerald-700">健康狀態</strong>的關鍵因素。正確的光照不僅能維持美麗，更是重要的商業賣點。</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-slate-200">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-emerald-700 mb-2">💡 最佳光照：明亮散射光</h3>
+                            <p class="text-slate-700">將植物放置在<strong class="font-semibold">靠近窗邊，但陽光不會直接照射</strong>的位置。例如，朝北或朝東的窗戶，或是隔著一層薄紗窗簾的朝南、朝西窗戶。明亮的散射光能促進光合作用，同時讓白色斑紋更加顯著、美麗。</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-amber-600 mb-2">⚠️ 注意：光線的兩極</h3>
+                             <ul class="list-disc list-inside space-y-2 text-slate-700">
+                                <li><strong class="font-semibold">光線過強：</strong>直射的陽光會灼傷嬌嫩的白色葉斑，導致其出現焦黃、褐色的斑點，嚴重影響美觀與商業價值。</li>
+                                <li><strong class="font-semibold">光線過弱：</strong>為了進行更有效的光合作用，植物會本能地產生更多葉綠素，導致<strong class="text-red-600">白色斑紋減少、變小，甚至完全「返祖」變綠</strong>，失去其獨特性。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-3 text-slate-800">商業攝影提示</h4>
+                        <p class="text-slate-600">在攝影時，應利用<strong class="font-semibold">柔和的自然側光</strong>來拍攝。這不僅能避免葉片反光，更能突顯葉面的質感與斑紋的層次感。一張在明亮窗邊拍攝、光影柔和的照片，最能傳達出白斑合果芋理想的生長環境與優雅氣質。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Section 5: Plant Profile -->
+        <section id="profile" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">核心美學：解構白斑合果芋</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600">快速掌握白斑合果芋的四大核心美學特徵與商業賣點。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">🏹</div>
+                    <h3 class="text-xl font-bold mb-2">箭頭葉形</h3>
+                    <p class="text-slate-600">標誌性的箭頭狀葉片，在植株成熟後會轉變為更複雜的裂葉形態，充滿變化之美。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">❄️</div>
+                    <h3 class="text-xl font-bold mb-2">雪白斑紋</h3>
+                    <p class="text-slate-600">從潑墨、塊狀到大面積的「半月」，每一片葉子的斑紋都獨一無二，是最大的魅力所在。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">🌿</div>
+                    <h3 class="text-xl font-bold mb-2">優雅藤蔓</h3>
+                    <p class="text-slate-600">天生的攀爬習性，可塑造成向上生長的綠柱，或作為吊盆自然垂下，造型多變。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 text-center">
+                    <div class="text-4xl mb-3">👍</div>
+                    <h3 class="text-xl font-bold mb-2">易於照護</h3>
+                    <p class="text-slate-600">生長快速，對環境適應力強，是斑葉植物中公認的入門首選，市場接受度極高。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 mt-16">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>互動式白斑合果芋商業指南 | 為商業成功而生</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Pot Selector Data based on Syngonium Albo Research
+            const potStyles = {
+                minimalist: {
+                    title: '極簡現代：突顯斑葉之美',
+                    materials: '啞光白陶瓷、高品質霧面塑膠、淺色水泥',
+                    philosophy: '在簡潔的空間中，讓盆器成為一個乾淨的背景。純白、淺灰、米色的直筒或方形盆器，能最大程度地突顯白斑合果芋葉片上的斑紋細節，讓植物本身成為主角。',
+                    photoGoal: '在明亮、純色的背景前拍攝，利用自然光，捕捉葉片斑紋的純粹之美。畫面構圖應乾淨，強調「少即是多」的高級感。'
+                },
+                natural: {
+                    title: '自然質樸：營造溫暖生活感',
+                    materials: '赤陶土 (Terracotta)、無釉陶器、藤編或海草編織套盆',
+                    philosophy: '溫暖的赤陶土或帶有手作溫度的材質，能與合果芋的自然野趣相得益彰。這種風格不追求完美，而是欣賞天然材料的質樸與溫暖，營造出舒適放鬆的氛圍。',
+                    photoGoal: '在充滿自然光、有木質家具、織品等元素的場景中拍攝，營造居家生活感。可以搭配書籍、咖啡杯等道具，傳達悠閒的日常之美。'
+                },
+                nordic: {
+                    title: '北歐清新：演繹明亮空氣感',
+                    materials: '帶有木質腳架的陶瓷盆、淺色系設計感塑膠盆',
+                    philosophy: '北歐風格強調功能、簡潔與自然光。將合果芋搭配一個帶有細長木腳的盆器，可以提升植物的視覺高度，創造輕盈、飄浮的空氣感，非常適合現代小空間。',
+                    photoGoal: '在淺色木地板和白色牆面的環境中拍攝，確保光線充足、明亮。強調植物與盆器腳架的線條感，營造清新、通透的空間氛圍。'
+                },
+                luxury: {
+                    title: '輕奢精緻：對比創造張力',
+                    materials: '高品質暗色釉面陶瓷 (墨綠、純黑)、帶金屬細節的盆器',
+                    philosophy: '利用深色、高光澤的盆器與植物的雪白斑紋形成強烈對比，創造戲劇性的視覺張力。這種搭配能瞬間提升植物的價值感，使其成為一件精緻的室內裝飾品。',
+                    photoGoal: '搭配絲絨、大理石、黃銅等材質的道具，使用柔和的側光打亮葉片，同時保留盆器的深邃光澤，營造精品雜誌般的質感與氛圍。'
+                },
+                functional: {
+                    title: '機能組合：釋放藤蔓潛力',
+                    materials: '高透氣內盆 + 裝飾性外盆、附帶苔蘚柱的盆器組合',
+                    philosophy: '這是專業且靈活的方案。讓植物在健康的機能內盆中生長，再搭配可隨時更換的風格外盆。對於合果芋，提供苔蘚柱讓其攀爬，不僅能促進葉片長得更大，本身也是一種極具吸引力的賣點。',
+                    photoGoal: '拍攝植物攀附在苔蘚柱上的茁壯姿態，或展示同一植株搭配不同風格外盆的「一植多用」概念，突顯您的專業度與產品的附加價值。'
+                }
+            };
+
+            const potDisplay = document.getElementById('pot-display');
+            const styleButtons = document.querySelectorAll('.pot-style-btn');
+
+            function updatePotDisplay(style) {
+                const data = potStyles[style];
+                potDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    potDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-slate-800">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-slate-700">推薦材質</h4>
+                                <p class="text-slate-600 mb-4">${data.materials}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-slate-700">風格理念</h4>
+                                <p class="text-slate-600">${data.philosophy}</p>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-emerald-700">攝影目標</h4>
+                                <p class="text-slate-600">${data.photoGoal}</p>
+                            </div>
+                        </div>
+                    `;
+                    potDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            styleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    styleButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updatePotDisplay(button.dataset.style);
+                });
+            });
+
+            // Initial display
+            updatePotDisplay('minimalist');
+
+
+            // Chart.js Soil Mixes for Taiwan Regions for Syngonium
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 10,
+                            boxWidth: 12
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.parsed + ' 份'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+            
+            // New green color palette for charts
+            const chartColors = ['#065f46', '#047857', '#059669', '#34d399', '#6ee7b7', '#a7f3d0'];
+
+            // Northern Taiwan Mix: Focus on high drainage for wet winters
+            new Chart(document.getElementById('northChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['粗樹皮', '珍珠石', '椰塊', '泥炭土', '蚯蚓糞'],
+                    datasets: [{
+                        label: '北部配方 (份)',
+                        data: [3, 3, 2, 1, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f1f5f9',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Central Taiwan Mix: Balanced all-purpose mix
+            new Chart(document.getElementById('centralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['泥炭土/椰纖', '珍珠石', '樹皮', '蛭石', '蚯蚓糞'],
+                    datasets: [{
+                        label: '中部配方 (份)',
+                        data: [3, 3, 2, 1, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f1f5f9',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Southern Taiwan Mix: Water retention + aeration for heat
+            new Chart(document.getElementById('southChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '泥炭土', '珍珠石', '樹皮', '蛭石'],
+                    datasets: [{
+                        label: '南部配方 (份)',
+                        data: [3, 2, 2, 2, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f1f5f9',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Eastern Taiwan Mix: Fast draining + weight for stability against rain/typhoons
+            new Chart(document.getElementById('eastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['粗樹皮', '火山石/蘭石', '椰塊', '珍珠石', '泥炭土'],
+                    datasets: [{
+                        label: '東部配方 (份)',
+                        data: [3, 2, 2, 2, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f1f5f9',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

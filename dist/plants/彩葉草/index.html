@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式彩葉草 (Coleus) 商業指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Color scheme: Gentle Light Green & Soft Rose */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f5f1; /* A very light, soft sage green */
+            color: #3a5a40; /* A deep, muted green for text */
+        }
+        .active-nav {
+            color: #c77d7d; /* A muted rose for accents */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #588157; /* A mid-tone green for inactive links */
+        }
+        .active-tab {
+            background-color: #c77d7d; /* Muted rose */
+            color: #ffffff;
+        }
+        .inactive-tab {
+            background-color: #a3b18a; /* A lighter, earthy green */
+            color: #3a5a40;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            margin: auto;
+        }
+        .card-bg {
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(209, 213, 219, 0.3);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-[#f0f5f1]/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/50">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-[#3a5a40]">
+                    <span class="text-[#c77d7d]">彩葉草</span>商業聖經
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#phenomenon" class="inactive-nav hover:text-[#c77d7d] transition-colors duration-300">色彩現象</a>
+                    <a href="#selector" class="inactive-nav hover:text-[#c77d7d] transition-colors duration-300">盆器風格</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-[#c77d7d] transition-colors duration-300">介質指南</a>
+                    <a href="#profile" class="inactive-nav hover:text-[#c77d7d] transition-colors duration-300">植株檔案</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-[#588157] hover:bg-gray-200/50 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 bg-[#f0f5f1] border-t border-gray-200/50">
+            <a href="#phenomenon" class="block py-2 inactive-nav">色彩現象</a>
+            <a href="#selector" class="block py-2 inactive-nav">盆器風格</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">介質指南</a>
+            <a href="#profile" class="block py-2 inactive-nav">植株檔案</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <section id="phenomenon" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#3a5a40] mb-4">色彩現象：解鎖彩葉草的商業潛能</h2>
+                <p class="max-w-3xl mx-auto text-lg text-[#588157]">彩葉草是活生生的調色盤。其無與倫比的色彩多樣性、快速的生長週期與極高的適應性，使其成為景觀設計與居家裝飾中，投資報酬率最高的視覺資產。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="card-bg p-6 rounded-xl shadow-lg">
+                    <h3 class="font-bold text-xl mb-3 text-[#c77d7d] flex items-center">
+                        <span class="text-2xl mr-2">🎨</span> 視覺價值
+                    </h3>
+                    <p class="text-[#588157]">從火焰般的橙紅到深邃的酒紫，彩葉草的葉片本身就是藝術品。成功的商業模式在於將這份視覺衝擊力，轉化為消費者渴望擁有的設計單品。</p>
+                </div>
+
+                <div class="card-bg p-6 rounded-xl shadow-lg">
+                    <h3 class="font-bold text-xl mb-3 text-[#60a5fa] flex items-center">
+                        <span class="text-2xl mr-2">🎯</span> 商業策略
+                    </h3>
+                    <p class="text-[#588157]">本指南將盆器、介質與光照視為一個系統。我們的目標是打造出健康、色彩飽和且極具攝影價值的彩葉草，輕鬆贏得市場關注。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="selector" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#3a5a40] mb-4">盆器風格：互動攝影指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-[#588157]">盆器是風格的延伸，直接影響攝影效果與產品價值。點擊下方不同的風格定位，探索最適合您商業攝影與銷售的策略。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-style="minimalist" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm active-tab">極簡現代</button>
+                <button data-style="rustic" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">鄉村自然</button>
+                <button data-style="eclectic" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">趣味混搭</button>
+                <button data-style="classic" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">經典華麗</button>
+            </div>
+
+            <div id="pot-display" class="card-bg rounded-xl shadow-lg p-6 md:p-8 transition-opacity duration-500">
+                </div>
+        </section>
+
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#3a5a40] mb-4">台灣分區介質指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-[#588157]">健康的根系是鮮豔色彩的基礎。針對台灣各區氣候的挑戰，我們提供精準的介質配方，確保您的植物從根部就充滿活力。</p>
+            </div>
+
+            <div class="card-bg rounded-xl shadow-lg p-6 md:p-8">
+                <div class="mb-8">
+                     <h3 class="font-bold text-2xl text-center mb-4 text-[#3a5a40]">介質的科學：平衡保水與排水</h3>
+                     <p class="text-center max-w-2xl mx-auto text-[#588157]">彩葉草既怕旱也怕澇。理想介質的核心目標是：<strong class="text-[#c77d7d]">在提供充足水分的同時，確保根部永遠不會窒息</strong>，這需要根據當地氣候精準調控介質的物理特性。</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-[#3a5a40]">北部配方</h4>
+                        <p class="text-sm text-[#588157] mb-4 h-12">對抗高濕度與冬季連綿陰雨，以最大化通氣性為首要目標。</p>
+                        <div class="chart-container"><canvas id="northChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-[#3a5a40]">中部配方</h4>
+                        <p class="text-sm text-[#588157] mb-4 h-12">氣候相對均衡，採用通用性高的黃金標準配方，平衡保水與排水。</p>
+                        <div class="chart-container"><canvas id="centralChart"></canvas></div>
+                    </div>
+                     <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-[#3a5a40]">南部配方</h4>
+                        <p class="text-sm text-[#588157] mb-4 h-12">應對酷夏與乾季，強化保水性，同時確保雨季的快速排水能力。</p>
+                        <div class="chart-container"><canvas id="southChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-[#3a5a40]">東部配方</h4>
+                        <p class="text-sm text-[#588157] mb-4 h-12">針對颱風與焚風，強化排水性並增加介質重量以求穩定。</p>
+                        <div class="chart-container"><canvas id="eastChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#3a5a40] mb-4">植株速覽檔案</h2>
+                <p class="max-w-3xl mx-auto text-lg text-[#588157]">快速掌握彩葉草的核心美學與商業賣點。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">🎨</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#3a5a40]">多彩葉片</h3>
+                    <p class="text-[#588157]">最大的賣點。葉色、圖案、形狀變化無窮，可滿足任何設計需求。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">🚀</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#3a5a40]">生長快速</h3>
+                    <p class="text-[#588157]">從繁殖到成品的週期短，能快速上市，資金週轉率高。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">✂️</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#3a5a40]">易於繁殖</h3>
+                    <p class="text-[#588157]">扦插成功率極高，可低成本快速擴大生產規模。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">☀️</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#3a5a40]">光照需求</h3>
+                    <p class="text-[#588157]">每天需 3-6 小時明亮散射光，晨光為佳。有耐曬品種，但需更多水分。光線是調控色彩的關鍵。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white/50 text-[#588157] mt-16 border-t border-gray-200/60">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>互動式彩葉草商業指南 | 為商業成功而生</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Pot Selector Data based on Coleus Research
+            const potStyles = {
+                minimalist: {
+                    title: '極簡現代：讓葉色成為主角',
+                    materials: '霧面陶瓷、水泥、高品質再生塑膠 (白、灰、黑)',
+                    philosophy: '中性、簡潔的盆器能最大程度突顯彩葉草複雜的葉片圖案與鮮豔色彩，避免視覺干擾，是現代室內設計的首選。',
+                    photoGoal: '創造高對比度的視覺衝擊。在純色背景下拍攝，讓彩葉草濃烈的色彩成為唯一的焦點，適合用於電商平台主圖。'
+                },
+                rustic: {
+                    title: '鄉村自然：營造溫暖質樸感',
+                    materials: '赤陶盆 (Terracotta)、木盆、藤編籃',
+                    philosophy: '赤陶盆的透氣性對彩葉草根系健康極佳。其樸實的質感能平衡葉片的華麗，營造和諧、有機的田園或波希米亞風格。',
+                    photoGoal: '拍攝充滿生活氣息的場景照。搭配木質家具、綠色植物背景，營造溫馨、自然的氛圍，吸引崇尚自然風格的客群。'
+                },
+                eclectic: {
+                    title: '趣味混搭：大膽的色彩遊戲',
+                    materials: '彩色釉面陶瓷盆、彩色塑膠盆',
+                    philosophy: '選擇與葉片上某個次要顏色相呼應的亮色盆器，創造充滿活力與驚喜的視覺效果，展現獨特的個人風格。',
+                    photoGoal: '創作引人注目的社群媒體內容。利用色彩碰撞吸引眼球，例如用藍色盆器搭配帶有紅色邊緣的葉片，創造強烈視覺張力。'
+                },
+                classic: {
+                    title: '經典華麗：打造視覺焦點',
+                    materials: '裝飾性釉面陶瓷盆、經典甕形盆',
+                    philosophy: '將大型、直立的彩葉草品種作為「主角」，搭配華麗的盆器，創造一個正式、氣派的裝飾品，適合門廊或庭院的視覺焦點。',
+                    photoGoal: '展現植栽的宏偉感與成品效果。在入口、廊道等空間拍攝，向客戶展示如何利用彩葉草提升空間格調。'
+                }
+            };
+
+            const potDisplay = document.getElementById('pot-display');
+            const styleButtons = document.querySelectorAll('.pot-style-btn');
+
+            function updatePotDisplay(style) {
+                const data = potStyles[style];
+                potDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    potDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-[#3a5a40]">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-[#3a5a40]">推薦材質</h4>
+                                <p class="text-[#588157] mb-4">${data.materials}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-[#3a5a40]">風格理念</h4>
+                                <p class="text-[#588157]">${data.philosophy}</p>
+                            </div>
+                            <div class="bg-[#f0f5f1]/80 p-4 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-[#c77d7d]">攝影目標</h4>
+                                <p class="text-[#588157]">${data.photoGoal}</p>
+                            </div>
+                        </div>
+                    `;
+                    potDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            styleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    styleButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updatePotDisplay(button.dataset.style);
+                });
+            });
+
+            // Initial display
+            updatePotDisplay('minimalist');
+
+
+            // Chart.js Soil Mixes for Taiwan Regions based on the Coleus research report
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 10,
+                            boxWidth: 12,
+                            color: '#588157' 
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.parsed + ' 份'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+            
+            // New color palette for charts on light background
+            const chartColors = ['#c77d7d', '#ddadaf', '#e8c8c9', '#f3e3e3']; // Muted Rose scale
+
+            // Northern Taiwan Mix
+            new Chart(document.getElementById('northChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '珍珠石/稻殼', '堆肥', '粗砂'],
+                    datasets: [{
+                        label: '北部配方 (份)',
+                        data: [3, 4, 2, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#f0f5f1', 
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Central Taiwan Mix
+            new Chart(document.getElementById('centralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖/泥炭土', '珍珠石/稻殼', '堆肥'],
+                    datasets: [{
+                        label: '中部配方 (份)',
+                        data: [4, 3, 3],
+                        backgroundColor: chartColors.slice(0, 3),
+                        borderColor: '#f0f5f1',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Southern Taiwan Mix
+            new Chart(document.getElementById('southChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '蛭石', '珍珠石/稻殼', '堆肥'],
+                    datasets: [{
+                        label: '南部配方 (份)',
+                        data: [4, 2, 2, 2],
+                        backgroundColor: chartColors,
+                        borderColor: '#f0f5f1',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Eastern Taiwan Mix
+            new Chart(document.getElementById('eastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '珍珠石/稻殼', '堆肥', '樹皮/粗砂'],
+                    datasets: [{
+                        label: '東部配方 (份)',
+                        data: [3, 3, 2, 2],
+                        backgroundColor: chartColors,
+                        borderColor: '#f0f5f1',
+                        borderWidth: 3
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

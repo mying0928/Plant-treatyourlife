@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式法老王面具水芋 (Colocasia 'Pharaoh Mask') 銷售指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 
+        Application Structure Plan: 
+        This SPA is an interactive guide for a Colocasia 'Pharaoh Mask' seller, adapted from the user's template.
+        1.  Hero Section: Introduces the 'Pharaoh Mask' as a living sculpture, summarizing its appeal.
+        2.  Interactive Style Selector: The core interactive element. The user can click different aesthetic styles (e.g., Modern Minimalist, Lush Tropical) to see recommended pot pairings and marketing angles.
+        3.  Regional Media Guide: Shows four specific potting media mixes for Taiwan's different regions using data-driven visualizations.
+        4.  Quick Care Guide: Key care points for 'Pharaoh Mask', now updated with specific lighting duration.
+        5.  Legal Notice: A crucial addition to warn about the plant patent.
+    -->
+    <!-- 
+        Visualization & Content Choices:
+        1.  Potting Strategy: JS-powered interactive card display. Interaction: User clicks a style name to see pot recommendations. Justification: More engaging and practical for a seller than a static table.
+        2.  Regional Soil Recipes: Four Chart.js doughnut charts. Interaction: Charts visually represent component ratios. Justification: Visual charts are easier to grasp than text-based ratios.
+        3.  Key Care Requirements: Styled HTML cards with icons. Updated with more specific lighting info as requested.
+        4.  Color Theme: A complete visual overhaul to a dark theme with gold/amber accents, reflecting the "Pharaoh" name and the plant's dramatic appearance. This change enhances the premium feel.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #1c1917; /* stone-900 */
+            color: #e7e5e4; /* stone-200 */
+        }
+        .active-nav {
+            color: #f59e0b; /* amber-500 */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #a8a29e; /* stone-400 */
+        }
+        .active-tab {
+            background-color: #f59e0b; /* amber-500 */
+            color: #1c1917;
+        }
+        .inactive-tab {
+            background-color: #44403c; /* stone-700 */
+            color: #d6d3d1; /* stone-300 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 250px; 
+            height: auto;
+            margin: auto;
+        }
+        .card-bg {
+            background-color: #292524; /* stone-800 */
+            border: 1px solid #57534e; /* stone-600 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-stone-900/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-black/20">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-stone-100">
+                    <span class="text-amber-500">法老王面具</span>商業聖經
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#introduction" class="inactive-nav hover:text-amber-500 transition-colors duration-300">品種介紹</a>
+                    <a href="#styling" class="inactive-nav hover:text-amber-500 transition-colors duration-300">風格定位</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-amber-500 transition-colors duration-300">介質指南</a>
+                    <a href="#careguide" class="inactive-nav hover:text-amber-500 transition-colors duration-300">養護速覽</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-stone-300 hover:bg-stone-700 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 bg-stone-900">
+            <a href="#introduction" class="block py-2 inactive-nav">品種介紹</a>
+            <a href="#styling" class="block py-2 inactive-nav">風格定位</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">介質指南</a>
+            <a href="#careguide" class="block py-2 inactive-nav">養護速覽</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: Introduction -->
+        <section id="introduction" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-100 mb-4">法老王面具水芋：視覺衝擊的活體藝術</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-400">Colocasia 'Pharaoh Mask' 不僅是植物，它是一個設計元素，一件能定義空間的雕塑品。其商業價值來自於其無與倫比的視覺張力。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="card-bg p-6 rounded-xl shadow-lg">
+                    <h3 class="font-bold text-xl mb-3 text-amber-500 flex items-center">
+                        <span class="text-2xl mr-2">🎭</span>視覺標誌
+                    </h3>
+                    <p class="text-stone-300">亮綠色葉面為基底，深邃的紫黑色葉脈戲劇性地隆起，創造出強烈的 <strong class="text-amber-400">3D 立體感</strong>。這種高反差的視覺效果是它魅力的核心。</p>
+                </div>
+
+                <div class="card-bg p-6 rounded-xl shadow-lg">
+                    <h3 class="font-bold text-xl mb-3 text-amber-500 flex items-center">
+                        <span class="text-2xl mr-2">🎯</span>商業策略
+                    </h3>
+                    <p class="text-stone-300">成功的關鍵在於<strong class="text-amber-400">強化其視覺語言</strong>。透過精準的盆器搭配與專業養護，將植物本身的藝術性轉化為高市場價值的商業產品。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Styling Guide -->
+        <section id="styling" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-100 mb-4">互動式風格定位與盆器策略</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-400">法老王面具擁有雙重美學人格。點擊下方風格，探索如何透過盆器選擇，為您的商業攝影與產品定位創造最大價值。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-style="minimalist" class="style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm active-tab">現代極簡風</button>
+                <button data-style="tropical" class="style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">繁茂熱帶風</button>
+                <button data-style="industrial" class="style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">工業時尚風</button>
+                <button data-style="gothic" class="style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">哥德戲劇風</button>
+            </div>
+
+            <div id="style-display" class="card-bg rounded-xl shadow-lg p-6 md:p-8 transition-opacity duration-500">
+                <!-- Content will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 3: Cultivation Guide / Regional Media Mix -->
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-100 mb-4">台灣分區精準介質指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-400">健康的根系是植株價值的核心。針對台灣南北氣候差異，我們提供科學化的介質配方，確保您的植株在任何地區都能茁壯成長。</p>
+            </div>
+
+            <div class="card-bg rounded-xl shadow-lg p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-stone-100">北部 - 平衡排水型</h4>
+                        <p class="text-sm text-stone-400 mb-4 h-12">應對冬季濕冷，預防根部在低溫積水環境下腐爛。</p>
+                        <div class="chart-container"><canvas id="northChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-stone-100">中部 - 肥沃保水型</h4>
+                        <p class="text-sm text-stone-400 mb-4 h-12">支持炎熱季節的旺盛生長，提供充足水分與養分。</p>
+                        <div class="chart-container"><canvas id="centralChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-stone-100">南部 - 耐熱耐濕型</h4>
+                        <p class="text-sm text-stone-400 mb-4 h-12">應對高溫與暴雨，兼顧快速排水與必要保水性。</p>
+                        <div class="chart-container"><canvas id="southChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2 text-stone-100">東部 - 極致通氣型</h4>
+                        <p class="text-sm text-stone-400 mb-4 h-12">對抗颱風季的連續降雨，將根系窒息風險降至最低。</p>
+                        <div class="chart-container"><canvas id="eastChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Quick Care Guide -->
+        <section id="careguide" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-100 mb-4">法老王養護速覽檔案</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-400">掌握四大核心要素，養出葉片碩大、色彩對比強烈的頂級植株。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">💧</div>
+                    <h3 class="text-xl font-bold mb-2">持續濕潤</h3>
+                    <p class="text-stone-400">天南星科植物熱愛水分。保持介質持續濕潤，但盆底絕不可積水，這是養護的第一要務。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">☀️</div>
+                    <h3 class="text-xl font-bold mb-2">充足散射光</h3>
+                    <p class="text-stone-400">每日至少需要 <strong class="text-amber-400">6-8 小時</strong> 的明亮散射光。避免正午直曬，但充足光照是維持其鮮豔葉色的關鍵。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">💨</div>
+                    <h3 class="text-xl font-bold mb-2">高空氣濕度</h3>
+                    <p class="text-stone-400">模擬其原生熱帶環境。高濕度有助於葉片舒展，避免葉緣焦枯，是養出巨大葉片的關鍵。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">🌱</div>
+                    <h3 class="text-xl font-bold mb-2">定期施肥</h3>
+                    <p class="text-stone-400">它是重肥植物。在生長季定期施用均衡的緩釋肥或液肥，是支持其快速生長的能量來源。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black/50 text-stone-400 mt-16">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>互動式法老王面具水芋銷售指南 | 為您的商業成功而生</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Interactive Styling Guide Data
+            const styleProfiles = {
+                minimalist: {
+                    title: '現代極簡風：線條與焦點的藝術',
+                    pots: '玻璃纖維、釉面陶瓷（啞光或亮光）',
+                    colors: '純白、淺灰、奶油色',
+                    implication: '此風格將植物的戲劇性葉脈提升為唯一的視覺焦點。在攝影中，使用乾淨、單色的背景，能創造出如同藝廊展品般的高級感，直接吸引對現代室內設計有高度品味的客群。'
+                },
+                tropical: {
+                    title: '繁茂熱帶風：創造都市叢林',
+                    pots: '陶土、深色陶瓷、仿石盆',
+                    colors: '陶土色、炭黑、深橄欖綠',
+                    implication: '營造一種豐盛、狂野的自然感。在攝影時可搭配其他觀葉植物（如蕨類、彩葉芋）作為背景，訴求渴望在家中打造「室內叢林」的植物收藏家，強調其群體中的視覺核心地位。'
+                },
+                industrial: {
+                    title: '工業時尚風：原始與精緻的對撞',
+                    pots: '水泥、耐候鋼、金屬',
+                    colors: '水泥原色、鏽蝕色、啞光黑',
+                    implication: '利用盆器的粗獷、冰冷質感，與植物充滿生命力的有機形態形成強烈對比。這種風格充滿張力，適合鎖定追求個性化、不拘一格設計風格的年輕消費族群。'
+                },
+                gothic: {
+                    title: '哥德戲劇風：神秘與精緻的融合',
+                    pots: '啞光黑陶瓷、深色金屬',
+                    colors: '啞光黑、炭灰、深紫色',
+                    implication: '將盆器與植物的深色葉脈融為一體，創造一個單色、神秘、充滿雕塑感的整體。這種風格獨特且高端，能吸引尋求稀有、具備「收藏家」特質植物的頂級買家。'
+                }
+            };
+
+            const styleDisplay = document.getElementById('style-display');
+            const styleButtons = document.querySelectorAll('.style-btn');
+
+            function updateStyleDisplay(style) {
+                const data = styleProfiles[style];
+                styleDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    styleDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-stone-100">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-stone-300">建議盆器材質</h4>
+                                <p class="text-stone-400 mb-4">${data.pots}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-stone-300">建議盆器顏色</h4>
+                                <p class="text-stone-400">${data.colors}</p>
+                            </div>
+                            <div class="bg-stone-900/70 p-4 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-amber-500">攝影與銷售啟示</h4>
+                                <p class="text-stone-300">${data.implication}</p>
+                            </div>
+                        </div>
+                    `;
+                    styleDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            styleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    styleButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updateStyleDisplay(button.dataset.style);
+                });
+            });
+
+            // Initial display
+            updateStyleDisplay('minimalist');
+
+
+            // Chart.js Regional Media Mixes
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 10,
+                            boxWidth: 12,
+                            color: '#a8a29e' // stone-400
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.parsed + ' 份'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+
+            const chartColors = ['#854d0e', '#a16207', '#ca8a04', '#eab308', '#f59e0b'];
+            const mediaLabels = ['蘭花樹皮/椰塊', '椰纖土', '浮石/珍珠石', '蚯蚓糞', '活性炭'];
+
+            // North Mix
+            new Chart(document.getElementById('northChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: mediaLabels,
+                    datasets: [{ data: [3, 2, 3, 1, 1], backgroundColor: chartColors, borderColor: '#292524', borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+
+            // Central Mix
+            new Chart(document.getElementById('centralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: mediaLabels,
+                    datasets: [{ data: [3, 3, 2, 2, 1], backgroundColor: chartColors, borderColor: '#292524', borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+
+            // South Mix
+            new Chart(document.getElementById('southChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: mediaLabels,
+                    datasets: [{ data: [4, 2, 3, 1, 1], backgroundColor: chartColors, borderColor: '#292524', borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+
+            // East Mix
+            new Chart(document.getElementById('eastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: mediaLabels,
+                    datasets: [{ data: [5, 1, 4, 1, 1], backgroundColor: chartColors, borderColor: '#292524', borderWidth: 3 }]
+                },
+                options: chartOptions
+            });
+
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式諾比觀音蓮 (Alocasia nobilis) 銷售指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!--  
+        Application Structure Plan:  
+        This SPA is a visually revamped, comprehensive guide for selling Alocasia nobilis.
+        1.  Hero Section: Introduces A. nobilis as a "living sculpture" with a new, luxurious color palette.
+        2.  Lighting Requirements Section: A new, dedicated section detailing the specific light needs (type, duration, intensity) of A. nobilis, a crucial and newly requested piece of information.
+        3.  Interactive Pot Selector: The proven tool for choosing pots, restyled to match the new color theme.
+        4.  Regional Cultivation Guide: The core soil recipe visualizer, using Chart.js, with colors adapted to the new theme.
+        5.  Plant Profile: Highlights the key aesthetic selling points, now with icons and colors that fit the luxurious theme.
+        This structure integrates the new user request (lighting) and a complete visual overhaul for a more premium feel.
+    -->
+    <!--  
+        Visualization & Content Choices:
+        1.  Report Info: Pot style matrix -> Goal: Compare & Decide -> Viz/Method: JS-powered interactive card display. Interaction: User clicks a "Style" button to dynamically update a display area. Justification: This interactive format is superior to a static table for conveying nuanced styling advice. Library: Vanilla JS.
+        2.  Report Info: Regional soil mix recipes -> Goal: Inform & Compare -> Viz/Method: Four Chart.js doughnut charts. Interaction: Charts visually represent precise component ratios. Justification: Visual charts make complex formulas instantly understandable. Library: Chart.js.
+        3.  New Report Info: Lighting Needs -> Goal: Inform & Guide -> Viz/Method: A dedicated, well-structured text section with icons. Justification: Lighting is a critical care parameter that requires clear, detailed explanation rather than just a chart. The use of icons and structured text makes it easy to digest.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #1a1b26; /* Deep, dark blue-purple */
+            color: #e0e0e0; /* Soft white/light gray */
+        }
+        .active-nav {
+            color: #fde047; /* yellow-300 */
+            font-weight: 700;
+        }
+        .inactive-nav {
+            color: #a0a0a0; /* gray-400 */
+        }
+        .active-tab {
+            background-color: #facc15; /* yellow-400 */
+            color: #1a1b26;
+        }
+        .inactive-tab {
+            background-color: #393a4c; /* Darker gray-blue */
+            color: #e0e0e0;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            margin: auto;
+        }
+        .card-bg {
+            background-color: #25273a; /* Slightly lighter blue-purple */
+            border: 1px solid #4a4c63; /* Subtle border */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-[#1a1b26]/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-black/20">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center py-4">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-100">
+                    <span class="text-yellow-300">諾比觀音蓮</span>商業聖經
+                </h1>
+                <div class="hidden md:flex space-x-6 lg:space-x-8 text-lg items-center">
+                    <a href="#phenomenon" class="inactive-nav hover:text-yellow-300 transition-colors duration-300">活體雕塑</a>
+                    <a href="#lighting" class="inactive-nav hover:text-yellow-300 transition-colors duration-300">光照指南</a>
+                    <a href="#selector" class="inactive-nav hover:text-yellow-300 transition-colors duration-300">盆器風格</a>
+                    <a href="#cultivation" class="inactive-nav hover:text-yellow-300 transition-colors duration-300">介質指南</a>
+                    <a href="#profile" class="inactive-nav hover:text-yellow-300 transition-colors duration-300">核心美學</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-300 hover:bg-gray-700 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-current"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                    <span class="block w-6 h-0.5 bg-current mt-1.5"></span>
+                </button>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2">
+            <a href="#phenomenon" class="block py-2 inactive-nav">活體雕塑</a>
+            <a href="#lighting" class="block py-2 inactive-nav">光照指南</a>
+            <a href="#selector" class="block py-2 inactive-nav">盆器風格</a>
+            <a href="#cultivation" class="block py-2 inactive-nav">介質指南</a>
+            <a href="#profile" class="block py-2 inactive-nav">核心美學</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Nobilis Phenomenon -->
+        <section id="phenomenon" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">活體雕塑：諾比觀音蓮的商業藝術</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-300">諾比觀音蓮 (Alocasia nobilis) 是一種活的建築雕塑。其強烈的垂直線條、深刻的葉緣輪廓、以及骨感的銀白葉脈，使其在任何空間中都成為視覺焦點。成功的商業策略，始於深刻理解其獨特美學。</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Lighting Guide -->
+        <section id="lighting" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">光照指南：激發葉色的關鍵</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-300">正確的光照是維持諾比觀音蓮深邃葉色與健康狀態的核心。過強或過弱的光線都會使其失去獨特的魅力。</p>
+            </div>
+            <div class="card-bg rounded-xl shadow-lg p-6 md:p-8">
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div>
+                        <div class="text-5xl mb-3 text-yellow-300">☀️</div>
+                        <h3 class="text-xl font-bold mb-2">光線品質</h3>
+                        <p class="text-gray-300">需要<strong class="text-yellow-300">大量、明亮且柔和的散射光</strong>。絕對避免夏季的陽光直射，那會灼傷葉片。理想位置是靠近朝東或朝北的窗戶，或在有遮蔽的陽台。</p>
+                    </div>
+                    <div>
+                        <div class="text-5xl mb-3 text-yellow-300">⏰</div>
+                        <h3 class="text-xl font-bold mb-2">光照時長</h3>
+                        <p class="text-gray-300">每日建議接受 <strong class="text-yellow-300">6-8 小時</strong>的間接光照。在室內光線不足的環境，可使用專業植物燈在距離葉面約 50-80 公分處進行補光，每日 10-12 小時。</p>
+                    </div>
+                    <div>
+                        <div class="text-5xl mb-3 text-yellow-300">⚠️</div>
+                        <h3 class="text-xl font-bold mb-2">警示信號</h3>
+                        <p class="text-gray-300">若葉色變淺、偏黃，是光線過強的信號。若葉柄軟垂、徒長（葉柄拉長），則是光線不足的表現。需及時調整位置。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Pot Selector -->
+        <section id="selector" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">盆器風格：全球視野下的互動攝影指南</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-300">盆器是風格的宣言，是為這座自然雕塑搭建的舞台。點擊下方源於全球市場分析的風格定位，探索最能提升諾比觀音蓮商業價值的視覺策略。</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-style="minimalist" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm active-tab">極簡現代</button>
+                <button data-style="natural" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">自然質樸</button>
+                <button data-style="designer" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">設計師款</button>
+                <button data-style="luxury" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">輕奢精緻</button>
+                <button data-style="system" class="pot-style-btn px-4 py-2 rounded-full font-semibold transition-all duration-300 ease-in-out shadow-sm inactive-tab">專業雙盆</button>
+            </div>
+
+            <div id="pot-display" class="card-bg rounded-xl shadow-lg p-6 md:p-8 transition-opacity duration-500">
+                <!-- Content will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Section 4: Cultivation Guide -->
+        <section id="cultivation" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">健康的基石：台灣各區客製化介質配方</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-300">健康的根系是一切美麗的基礎。觀音蓮的根極怕悶濕，理想介質需在<strong class="text-yellow-300">保水、疏水、透氣</strong>三者間取得完美平衡。以下是我們為台灣各區氣候量身打造的精準配方。</p>
+            </div>
+
+            <div class="card-bg rounded-xl shadow-lg p-6 md:p-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">北部配方</h4>
+                        <p class="text-sm text-gray-400 mb-4 h-12">極致透氣抗濕冷配方：應對冬季的持續潮濕，防止根部在低溫高濕下腐爛。</p>
+                        <div class="chart-container"><canvas id="northChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">中部配方</h4>
+                        <p class="text-sm text-gray-400 mb-4 h-12">經典均衡配方：氣候相對穩定，講求保水、排水與營養的完美平衡。</p>
+                        <div class="chart-container"><canvas id="centralChart"></canvas></div>
+                    </div>
+                     <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">南部配方</h4>
+                        <p class="text-sm text-gray-400 mb-4 h-12">抗旱保濕透氣配方：應對強日照下的快速蒸發，同時確保夏季透氣。</p>
+                        <div class="chart-container"><canvas id="southChart"></canvas></div>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-bold text-xl mb-2">東部配方</h4>
+                        <p class="text-sm text-gray-400 mb-4 h-12">防洪快排配方：應對颱風季的瞬間強降雨，並增加盆器穩定性。</p>
+                        <div class="chart-container"><canvas id="eastChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Plant Profile -->
+        <section id="profile" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">核心美學：解構諾比觀音蓮</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-300">快速掌握諾比觀音蓮的四大核心美學特徵與商業賣點。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">🏛️</div>
+                    <h3 class="text-xl font-bold mb-2">建築線條</h3>
+                    <p class="text-gray-300">狹長挺拔的葉形，賦予植株強烈的垂直感與建築形式感，是空間中的焦點。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">🔪</div>
+                    <h3 class="text-xl font-bold mb-2">深刻葉緣</h3>
+                    <p class="text-gray-300">深刻銳利的波浪狀裂口，輪廓分明，極具戲劇張力與視覺衝擊力。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">💀</div>
+                    <h3 class="text-xl font-bold mb-2">骨感葉脈</h3>
+                    <p class="text-gray-300">銀白色的主側脈在深黑葉面上形成強烈對比，營造引人注目的「骷髏」外觀。</p>
+                </div>
+                <div class="card-bg p-6 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-3">✨</div>
+                    <h3 class="text-xl font-bold mb-2">精緻光澤</h3>
+                    <p class="text-gray-300">葉面帶有近乎金屬的光澤感，能反射光線，為植株增添高貴、精緻的氣質。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#1a1b26] mt-16 border-t border-gray-800">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-500">
+            <p>互動式諾比觀音蓮商業指南 | 為商業成功而生</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Pot Selector Data
+            const potStyles = {
+                minimalist: {
+                    title: '極簡現代：聚焦植物線條',
+                    materials: '啞光陶瓷、高品質霧面塑膠、輕質水泥',
+                    philosophy: '在明亮、簡潔的空間中，讓盆器退為一個沉靜的基座。啞光白、淺灰、米色的直筒形盆器，能完全突顯諾比觀音蓮本身的雕塑感與線條美。',
+                    photoGoal: '在明亮、簡潔的背景中拍攝，突顯植物線條與空間感。可搭配淺色木質家具，營造「少即是多」的高級感。'
+                },
+                natural: {
+                    title: '自然質樸：傳達手作溫度',
+                    materials: '赤陶土 (Terracotta)、無釉陶器、藤編或海草編織套盆',
+                    philosophy: '溫暖的赤陶土盆或帶有手作痕跡的陶器，能與諾比觀音蓮的野性相得益彰。這種風格不追求完美線條，而是欣賞天然材料的溫度與歲月感。',
+                    photoGoal: '在充滿自然光、有織品、木頭等溫暖元素的場景中拍攝，營造生活感與手作溫度，強調質樸的魅力。'
+                },
+                designer: {
+                    title: '設計師款：演繹建築美學',
+                    materials: '清水模水泥、特殊造型陶瓷、金屬',
+                    philosophy: '將諾比觀音蓮視為一件建築作品。厚重、粗獷的水泥盆，或具有幾何形狀的設計師盆器，能強化其充滿力量的質感，適合追求獨特品味的藏家。',
+                    photoGoal: '在純色或具有建築細節的背景前拍攝，使用強烈的光影對比，強調盆器與植物的雕塑感，營造藝術品般的氛圍。'
+                },
+                luxury: {
+                    title: '輕奢精緻：輝映高雅品味',
+                    materials: '高品質釉面陶瓷、帶金屬細節的盆器 (黃銅、赤銅)',
+                    philosophy: '將諾比觀音蓮提升為一件真正的裝飾藝術品。飽和的墨綠、寶石藍盆器，或帶有金色底座的黑色盆器，能與精緻的室內陳設相呼應，傳達高雅的生活品味。',
+                    photoGoal: '搭配絲絨、大理石、黃銅等精緻材質的道具，利用柔和光線，捕捉葉面與盆器的光澤互動，營造精品雜誌般的場景。'
+                },
+                system: {
+                    title: '專業雙盆：兼顧機能與商業彈性',
+                    materials: '高透氣的功能性塑膠內盆 + 任意風格的裝飾性外盆(套盆)',
+                    philosophy: '這是專業賣家的最佳方案。植株在機能內盆中健康生長，銷售時再搭配不同風格的高級套盆，既保證了客戶養護成功率，也提供了客製化的彈性。',
+                    photoGoal: '展示其專業性與多樣性。可拍攝將內盆取出檢查根系的教學照，或展示同一植株搭配不同風格套盆的組合，突顯產品的附加價值與您的專業度。'
+                }
+            };
+
+            const potDisplay = document.getElementById('pot-display');
+            const styleButtons = document.querySelectorAll('.pot-style-btn');
+
+            function updatePotDisplay(style) {
+                const data = potStyles[style];
+                potDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    potDisplay.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-gray-100">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-2 text-gray-300">推薦材質</h4>
+                                <p class="text-gray-400 mb-4">${data.materials}</p>
+                                <h4 class="font-semibold text-lg mb-2 text-gray-300">風格理念</h4>
+                                <p class="text-gray-400">${data.philosophy}</p>
+                            </div>
+                            <div class="bg-[#1a1b26] p-4 rounded-lg border border-gray-700">
+                                <h4 class="font-semibold text-lg mb-2 text-yellow-300">攝影目標</h4>
+                                <p class="text-gray-400">${data.photoGoal}</p>
+                            </div>
+                        </div>
+                    `;
+                    potDisplay.style.opacity = 1;
+                }, 300);
+            }
+
+            styleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    styleButtons.forEach(btn => {
+                        btn.classList.remove('active-tab');
+                        btn.classList.add('inactive-tab');
+                    });
+                    button.classList.add('active-tab');
+                    button.classList.remove('inactive-tab');
+                    updatePotDisplay(button.dataset.style);
+                });
+            });
+
+            // Initial display
+            updatePotDisplay('minimalist');
+
+
+            // Chart.js Soil Mixes
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 10,
+                            boxWidth: 12,
+                            color: '#e0e0e0'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) { label += context.parsed + ' 份'; }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+
+            const chartColors = ['#fde047', '#facc15', '#eab308', '#ca8a04', '#a16207', '#854d0e'].reverse();
+
+            // Northern Taiwan Mix
+            new Chart(document.getElementById('northChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['粗樹皮', '椰塊', '珍珠石', '火山石', '泥炭土', '炭化稻殼'],
+                    datasets: [{
+                        label: '北部配方 (份)',
+                        data: [3, 2, 2, 1, 1, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#25273a',
+                        borderWidth: 4
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Central Taiwan Mix
+            new Chart(document.getElementById('centralChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['泥炭土/椰纖', '珍珠石', '樹皮', '蚯蚓糞', '活性碳'],
+                    datasets: [{
+                        label: '中部配方 (份)',
+                        data: [3, 3, 2, 1, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#25273a',
+                        borderWidth: 4
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Southern Taiwan Mix
+            new Chart(document.getElementById('southChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['椰纖', '泥炭土', '蛭石', '珍珠石', '樹皮'],
+                    datasets: [{
+                        label: '南部配方 (份)',
+                        data: [3, 2, 2, 2, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#25273a',
+                        borderWidth: 4
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Eastern Taiwan Mix
+            new Chart(document.getElementById('eastChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['粗樹皮', '火山石/煉石', '椰塊', '泥炭土', '活性碳'],
+                    datasets: [{
+                        label: '東部配方 (份)',
+                        data: [3, 3, 2, 1, 1],
+                        backgroundColor: chartColors,
+                        borderColor: '#25273a',
+                        borderWidth: 4
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobile-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(a => {
+                    a.classList.remove('active-nav');
+                    a.classList.add('inactive-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                        a.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
