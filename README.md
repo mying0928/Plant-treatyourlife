@@ -1,4 +1,4 @@
-https://mying0928.github.io/Plant-Astro/
+https://mying0928.github.io/Plant-treatyourlife/
 
 馴養一株來自野外的奇妙生物
 
