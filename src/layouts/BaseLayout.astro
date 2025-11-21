@@ -14,7 +14,7 @@ const { title } = Astro.props;
     <style is:global>
         @font-face {
             font-family: 'ChenYuluoyan';
-            src: url('/Plant-Astro/fonts/ChenYuluoyan-2.0-Thin.ttf') format('truetype');
+            src: url('/Plant-treatyourlife/fonts/ChenYuluoyan-2.0-Thin.ttf') format('truetype');
         }
     </style>
 </head>
@@ -48,57 +48,6 @@ const { title } = Astro.props;
                     searchTermDisplay.textContent = event.target.value;
                 }
             });
-        }
-        function initializeParticleEffect() {
-            const canvas = document.getElementById('particle-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let mouse = { x: null, y: null };
-            const options = { particleCount: window.innerWidth < 768 ? 80 : 150, connectDistance: 100, mouseDistance: 150 };
-            class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.5; this.color = `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.7})`; } draw() { ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
-            function setup() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = []; for (let i = 0; i < options.particleCount; i++) { particles.push(new Particle()); } }
-            function draw() { ctx.clearRect(0, 0, canvas.width, canvas.height); for (const p of particles) { p.draw(); } if (mouse.x) { for (let i = 0; i < particles.length; i++) { const p1 = particles[i]; const distToMouse = Math.hypot(p1.x - mouse.x, p1.y - mouse.y); if (distToMouse < options.mouseDistance) { for (let j = i + 1; j < particles.length; j++) { const p2 = particles[j]; const distBetweenParticles = Math.hypot(p1.x - p2.x, p1.y - p2.y); if (distBetweenParticles < options.connectDistance) { ctx.beginPath(); ctx.strokeStyle = `rgba(224, 242, 254, ${1 - distBetweenParticles / options.connectDistance})`; ctx.lineWidth = 0.4; ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } } } } } }
-            let animationFrameId;
-            function animate() { draw(); animationFrameId = requestAnimationFrame(animate); }
-            function handleMouseMove(event) { mouse.x = event.x; mouse.y = event.y; }
-            function handleMouseOut() { mouse.x = null; mouse.y = null; }
-            window.addEventListener('resize', () => { cancelAnimationFrame(animationFrameId); setup(); animate(); });
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseout', handleMouseOut);
-            setup(); animate();
-        }
-        function initializeMusicPlayer() {
-            const YOUTUBE_VIDEO_ID = 'TgOu00Mf3kI';
-            const tag = document.createElement('script');
-            tag.src = "https://www.youtube.com/iframe_api";
-            const firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-            let player;
-            let isMuted = true;
-            window.onYouTubeIframeAPIReady = function() {
-                player = new YT.Player('youtube-player-container', {
-                    height: '315', width: '560', videoId: YOUTUBE_VIDEO_ID,
-                    playerVars: { 'autoplay': 1, 'controls': 0, 'loop': 1, 'playlist': YOUTUBE_VIDEO_ID, 'mute': 1 },
-                    events: { 'onReady': (event) => event.target.playVideo() }
-                });
-            }
-            const toggleMusicBtn = document.getElementById('toggle-music-btn');
-            if (toggleMusicBtn) {
-                toggleMusicBtn.addEventListener('click', () => {
-                    if (player && typeof player.unMute === 'function') {
-                        if (isMuted) {
-                            player.unMute();
-                            toggleMusicBtn.innerHTML = '<i data-lucide="music-2" class="w-6 h-6"></i>';
-                        } else {
-                            player.mute();
-                            toggleMusicBtn.innerHTML = '<i data-lucide="volume-x" class="w-6 h-6"></i>';
-                        }
-                        isMuted = !isMuted;
-                        lucide.createIcons();
-                    }
-                });
-            }
         }
         function initializeScrollToTop() {
             const scrollToTopBtn = document.getElementById('scrollToTopBtn');

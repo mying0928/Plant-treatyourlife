@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- 
-      Application Structure Plan: 
+    <!--
+      Application Structure Plan:
       This SPA is designed as an interactive guide for a Monstera seller.
       1. Hero Section: Introduces the "Monstera Phenomenon" from the research.
       2. Interactive Pot Selector: Adapts the pot matrix from the research into a dynamic tool. Users select a style, and the tool provides pot recommendations and photo tips.
@@ -18,7 +18,7 @@
       4. Plant Profile: Highlights Monstera's key selling points (fenestrations, climbing habit, and now, lighting duration).
       This structure prioritizes user engagement and practical application of the research data.
     -->
-    <!-- 
+    <!--
       Visualization & Content Choices:
       1. Report Info: Pot style matrix -> Goal: Compare & Decide -> Viz/Method: JS-powered interactive card display. Interaction: User clicks a "Style" button to dynamically update a display area with relevant pot info and photo advice. Justification: More engaging and user-centric than a static table. Library: Vanilla JS.
       2. Report Info: Regional soil mix recipes -> Goal: Inform & Compare -> Viz/Method: Four Chart.js doughnut charts. Interaction: Charts visually represent component proportions. Hovering shows details. Justification: Visual charts are far easier to comprehend than text-based ratios, directly addressing the user's need for regional formulas. Library: Chart.js.
@@ -88,31 +88,25 @@
     <main class="container mx-auto px-4 py-8 md:py-12">
 
         <!-- Section 1: The Monstera Phenomenon -->
-	<section id="careguide" class="scroll-mt-24">
+        <section id="phenomenon" class="mb-16 scroll-mt-24">
             <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">龜背芋養護速覽檔案</h2>
-                <p class="max-w-3xl mx-auto text-lg text-neutral-600">掌握四大核心要素，養出巨大葉面、裂葉完美且充滿光澤的雨林巨獸。</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-stone-800 mb-4">龜背芋現象：從植物到文化符號</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-600">龜背芋不僅是植物，它已演變為一種文化符號和高價值的室內設計元素。它標誌性的裂葉，使其成為當代室內綠化的「明星」，這正是其商業價值的根基。</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
-                    <div class="text-4xl mb-3">☀️</div>
-                    <h3 class="text-xl font-bold mb-2">明亮散射光</h3>
-                    <p class="text-neutral-600">裂葉（開背）的關鍵。需要充足的明亮散射光，避免強烈直射曝曬以免葉燒，光線不足則葉片會變小且無裂痕。</p>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-stone-200">
+                    <h3 class="font-bold text-xl mb-3 text-amber-700 flex items-center">
+                        <span class="text-2xl mr-2">📈</span>市場價值
+                    </h3>
+                    <p class="text-stone-700">在社群媒體和設計雜誌中，擁有完美裂葉和健康姿態的龜背芋，是高價值的代名詞。成功的商業模式，在於將園藝科學與市場美學深度融合。</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
-                    <div class="text-4xl mb-3">💧</div>
-                    <h3 class="text-xl font-bold mb-2">見乾見濕</h3>
-                    <p class="text-neutral-600">喜濕潤但怕積水爛根。手指插入土中約兩指節乾燥後再澆透。提高環境濕度有助於氣生根發育與葉片光澤。</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
-                    <div class="text-4xl mb-3">🥥</div>
-                    <h3 class="text-xl font-bold mb-2">疏鬆介質</h3>
-                    <p class="text-neutral-600">根系需要呼吸。請務必使用排水性極佳的粗顆粒介質（如椰塊、樹皮、珍珠石混合），避免使用過於黏重的土壤。</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
-                    <div class="text-4xl mb-3">🌱</div>
-                    <h3 class="text-xl font-bold mb-2">薄肥勤施</h3>
-                    <p class="text-neutral-600">食量較大，生長旺季（春、夏、秋）需定期補充觀葉植物專用肥（高氮），能顯著促進葉片巨大化與裂葉形成。</p>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-stone-200">
+                    <h3 class="font-bold text-xl mb-3 text-orange-600 flex items-center">
+                        <span class="text-2xl mr-2">🎯</span>商業策略
+                    </h3>
+                    <p class="text-stone-700">本指南將盆器、介質與植株視為一個不可分割的整體系統。我們的目標是打造高端、具備銷售潛力的龜背芋產品，贏得市場信賴。</p>
                 </div>
             </div>
         </section>
@@ -175,31 +169,31 @@
         </section>
 
         <!-- Section 4: Plant Profile -->
-        <section id="profile" class="scroll-mt-24">
+        <section id="careguide" class="scroll-mt-24">
             <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-bold text-stone-800 mb-4">植株速覽檔案</h2>
-                <p class="max-w-3xl mx-auto text-lg text-stone-600">快速掌握龜背芋的核心美學與商業賣點。</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">龜背芋養護速覽檔案</h2>
+                <p class="max-w-3xl mx-auto text-lg text-neutral-600">掌握四大核心要素，養出巨大葉面、裂葉完美且充滿光澤的雨林巨獸。</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-stone-200 text-center">
-                    <div class="text-4xl mb-3">🌿</div>
-                    <h3 class="text-xl font-bold mb-2">標誌性裂葉</h3>
-                    <p class="text-stone-600">成熟葉片上獨特的孔洞與裂葉（開窗）是其最大賣點，與光照強度直接相關。</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-stone-200 text-center">
-                    <div class="text-4xl mb-3">🧗</div>
-                    <h3 class="text-xl font-bold mb-2">攀爬習性</h3>
-                    <p class="text-stone-600">天生是攀爬植物，提供苔蘚柱等支撐物能促進葉片變大，形成更具價值的直立株型。</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-stone-200 text-center">
-                    <div class="text-4xl mb-3">🌱</div>
-                    <h3 class="text-xl font-bold mb-2">氣生根</h3>
-                    <p class="text-stone-600">長出的氣生根是健康指標，可引導其攀附支柱或入土，以吸收更多養分並穩定植株。</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-stone-200 text-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
                     <div class="text-4xl mb-3">☀️</div>
-                    <h3 class="text-xl font-bold mb-2">光照時長</h3>
-                    <p class="text-stone-600">每日需至少 6-8 小時的明亮散射光。充足但非直射的陽光是促進葉片完美「開窗」的關鍵。</p>
+                    <h3 class="text-xl font-bold mb-2">明亮散射光</h3>
+                    <p class="text-neutral-600">裂葉（開背）的關鍵。需要充足的明亮散射光，避免強烈直射曝曬以免葉燒，光線不足則葉片會變小且無裂痕。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">💧</div>
+                    <h3 class="text-xl font-bold mb-2">見乾見濕</h3>
+                    <p class="text-neutral-600">喜濕潤但怕積水爛根。手指插入土中約兩指節乾燥後再澆透。提高環境濕度有助於氣生根發育與葉片光澤。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">🥥</div>
+                    <h3 class="text-xl font-bold mb-2">疏鬆介質</h3>
+                    <p class="text-neutral-600">根系需要呼吸。請務必使用排水性極佳的粗顆粒介質（如椰塊、樹皮、珍珠石混合），避免使用過於黏重的土壤。</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 text-center">
+                    <div class="text-4xl mb-3">🌱</div>
+                    <h3 class="text-xl font-bold mb-2">薄肥勤施</h3>
+                    <p class="text-neutral-600">食量較大，生長旺季（春、夏、秋）需定期補充觀葉植物專用肥（高氮），能顯著促進葉片巨大化與裂葉形成。</p>
                 </div>
             </div>
         </section>
@@ -323,7 +317,7 @@
                 },
                 cutout: '60%'
             };
-            
+
             // Earthy/Terracotta color palette for charts
             const chartColors = ['#92400e', '#a16207', '#ca8a04', '#eab308', '#f59e0b'];
 
