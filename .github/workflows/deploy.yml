@@ -1,51 +1,47 @@
-# 工作流程的名稱
 name: Deploy to GitHub Pages
 
-# 觸發條件：當有任何變更被推送到 main 分支時
 on:
+  # 當推送到 `main` 分支時觸發
   push:
     branches:
-      - main # 注意：如果您的主要分支是 master，請將此處改為 master
-  workflow_dispatch:
+      - main
 
-# 權限設定：允許工作流程讀取儲存庫內容並部署到 GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# 工作內容
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 程式碼
+      - name: Checkout your repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # 建議使用 Node.js 20 LTS 版本
-          cache: 'npm'
+          node-version: '18' # 您可以根據需要更改 Node.js 版本
 
-      - name: 安裝依賴
+      - name: Install dependencies
         run: npm install
 
-      - name: 建置 Astro 網站
+      - name: Build your site
+        # 假設您的 build script 是 'npm run build'
+        # Astro 預設會將網站輸出到 'dist' 資料夾
         run: npm run build
 
-      - name: 上傳建置成品
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # 從 Astro 的輸出目錄上傳
           path: ./dist
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
-      - name: 部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
